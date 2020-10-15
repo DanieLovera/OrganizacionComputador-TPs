@@ -11,14 +11,14 @@ int mascaraBase = 0x00FC0000;
 
 
 void printHelp();
-void decode(FILE* inputFile, FILE* outputFile);
-void code(FILE* inputFile, FILE* outputFile);
 int combineBytes(char* block, size_t readBytes, bool code);
 char* codification(int binaryCode, size_t readBytes);
 char* decodification(int binaryCode, size_t readBytes);
 int findPosition(char caracter);
-void removeEquals(char* buffer, size_t* readBytes);
+//void removeEquals(char* buffer, size_t* readBytes);
+void removeCharacter(char* buffer, char character, size_t* readBytes);
 void resetBuffer(char* buffer);
+void modifyBuffer(char* buffer);
 
 
 
@@ -53,7 +53,7 @@ int main(int argc, char const *argv[]){
 		}
 
 		else if (!strcmp(argv[i], "-o")){
-			outputFile = fopen(argv[i + 1], "r");
+			outputFile = fopen(argv[i + 1], "w");
 
 			if(!outputFile){
 					fprintf(stderr, "Error: Cannot open/find the specified input file");
@@ -67,27 +67,23 @@ int main(int argc, char const *argv[]){
 	size_t readBytes = fread(buffer, 1, sizeof(buffer) - 1, inputFile);
 
 	while(!feof(inputFile) || readBytes != 0){
-		
-		/*if (feof(inputFile)){ //DECIDIR QUE HACER CON ESTO
-			buffer[readBytes--] = '\0';
-		}*/
-
-		if (!code && strstr(buffer, "=")){
-			removeEquals(buffer, &readBytes);
+		if (!code && (strstr(buffer, "=") || strstr(buffer, "\n"))){
+			char remove = (strstr(buffer, "=")) ? '=' : '\n';
+			removeCharacter(buffer, remove, &readBytes); //Supongo que si esta codificado no viene en dos lineas
+			if (!readBytes) break;
 		}
 
-		if (!code && strstr(buffer, "\n")) break; //decidir despues, el texto codificado no puede tener \n, no quiere decir que no se pueda formar
-
-		int resultado = combineBytes(buffer, readBytes, code);
+		int combinedBytes = combineBytes(buffer, readBytes, code);
 		
-		if (resultado < 0){
+		if (combinedBytes < 0){
 			return 1;
 		}
-		char* result = func(resultado, readBytes);
-		printf("%s", result); //usar fwrite despues
+
+		char* result = func(combinedBytes, readBytes);
+		fwrite(result, sizeof(char), readBytes + 1, outputFile);
 		free(result);
-		resetBuffer(buffer);
-		readBytes = fread(buffer, 1, sizeof(buffer) - 1, inputFile); //queda con basura
+		resetBuffer(buffer); //Queda con basura en cada iteracion, lo limpiamos
+		readBytes = fread(buffer, 1, sizeof(buffer) - 1, inputFile);
 	}
 	printf("\n");
 	return 0;
@@ -161,9 +157,9 @@ int findPosition(char caracter){
 	return -1;
 }
 
-void removeEquals(char* buffer, size_t* readBytes){
+void removeCharacter(char* buffer, char character, size_t* readBytes){
 	for (size_t i = 0; i < strlen(buffer); i++){
-		if (buffer[i] == '=') *readBytes -= 1;
+		if (buffer[i] == character) *readBytes -= 1;
 	}
 }
 
@@ -171,40 +167,3 @@ void resetBuffer(char* buffer){
 	size_t pos = 0;
 	while(buffer[pos] != '\0') buffer[pos++] = '\0';
 }
-
-
-/*har* codification(int binaryCode, size_t readBytes, bool code){//podria recibir un booleano code = true decode = false
-	if (code){
-		int shiftsLeft[] = {8, 14, 20, 26};
-		int shiftRight = 26; //ojo que cambia segun codificas o decodificas 24 si decodificas
-		size_t iterations = readBytes + 1;
-		char* code = malloc(5);
-		code[0] = '=';
-		code[1] = '=';
-		code[2] = '=';
-		code[3] = '=';
-		code[4] = '\0';
-	}
-	else{
-		int shiftsLeft[] = {8, 16, 24};
-		int shiftRight = 24; 
-		size_t iterations = readBytes - 1;
-		char* code = malloc(readBytes);
-		code[readBytes - 1] = '\0';
-	}
-
-	size_t posCode = 0;
-	for (size_t i = 0; i < iterations; i++){ //1 byte -> 2 iteraciones; 2 byte -> 3 iteraciones; 3 byte -> 4 iteraciones
-		int binaryCodeAux = binaryCode; //para guardar el binario original
-		binaryCodeAux = binaryCodeAux << shiftsLeft[i];
-		binaryCodeAux = (int)((unsigned) binaryCodeAux >> shiftRight);
-		//code[posCode++] = (code) ? BASE64[binaryCodeAux] : (char) binaryCodeAux; //si esta en code uso la cte BASE64, sino es el ascii comun
-		if (code){
-			code[posCode++] = BASE64[binaryCodeAux];
-		}
-		else{
-			code[posCode++] = (char) binaryCodeAux;
-		}
-	}
-	return code;
-}*/
