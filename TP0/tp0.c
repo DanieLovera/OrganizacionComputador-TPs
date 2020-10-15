@@ -7,15 +7,12 @@
 #include <stdbool.h>
 #define _POSIX_C_SOURCE 200809L //para incluir getline
 char* BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-int mascaraBase = 0x00FC0000;
-
 
 void printHelp();
 int combineBytes(char* block, size_t readBytes, bool code);
 char* codification(int binaryCode, size_t readBytes);
 char* decodification(int binaryCode, size_t readBytes);
 int findPosition(char caracter);
-//void removeEquals(char* buffer, size_t* readBytes);
 void removeCharacter(char* buffer, char character, size_t* readBytes);
 void resetBuffer(char* buffer);
 void modifyBuffer(char* buffer);
