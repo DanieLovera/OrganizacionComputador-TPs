@@ -26,34 +26,36 @@ int main(int argc, char const *argv[]){
 	char* (*func)(int, size_t) = codification;
 
 	for (size_t i = 1; i < argc; i++){
-		if (!strcmp(argv[i], "-h")) {
+		if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
 			printHelp();
-			break;
+			return 0;
 		}
 
-		else if (!strcmp(argv[i], "-V")){
+		else if (!strcmp(argv[i], "-V") || !strcmp(argv[i], "--version")){
 			fprintf(stdout, "Version 1.0.0\n");
-			break;
+			return 0;
 		}
 
-		else if (!strcmp(argv[i], "-d")){
+		else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decode")){
 			code = false;
 			func = decodification;
 		}
 
-		else if (!strcmp(argv[i], "-i")){
+		else if (!strcmp(argv[i], "-i") || !strcmp(argv[i], "--input")){
 			inputFile = fopen(argv[i + 1], "r");
 
 			if(!inputFile){
 					fprintf(stderr, "Error: Cannot open/find the specified input file");
+					return 1;
 			}
 		}
 
-		else if (!strcmp(argv[i], "-o")){
+		else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")){
 			outputFile = fopen(argv[i + 1], "w");
 
 			if(!outputFile){
 					fprintf(stderr, "Error: Cannot open/find the specified input file");
+					return 1;
 			}
 		}
 	}
@@ -77,7 +79,7 @@ int main(int argc, char const *argv[]){
 		}
 
 		char* result = func(combinedBytes, readBytes);
-		fwrite(result, sizeof(char), readBytes + 1, outputFile);
+		fwrite(result, sizeof(char), strlen(result), outputFile);
 		free(result);
 		resetBuffer(buffer); //Queda con basura en cada iteracion, lo limpiamos
 		readBytes = fread(buffer, 1, sizeof(buffer) - 1, inputFile);
