@@ -68,7 +68,7 @@ int main(int argc, char const *argv[]){
 	while(!feof(inputFile) || readBytes != 0){
 		if (!code && (strstr(buffer, "=") || strstr(buffer, "\n"))){
 			char remove = (strstr(buffer, "=")) ? '=' : '\n';
-			removeCharacter(buffer, remove, &readBytes); //Supongo que si esta codificado no viene en dos lineas
+			removeCharacter(buffer, remove, &readBytes);
 			if (!readBytes) break;
 		}
 
@@ -81,7 +81,7 @@ int main(int argc, char const *argv[]){
 		char* result = func(combinedBytes, readBytes);
 		fwrite(result, sizeof(char), strlen(result), outputFile);
 		free(result);
-		resetBuffer(buffer); //Queda con basura en cada iteracion, lo limpiamos
+		resetBuffer(buffer); //Lo limpiamos para que no quede con basura en cada iteracion
 		readBytes = fread(buffer, 1, sizeof(buffer) - 1, inputFile);
 	}
 	printf("\n");
@@ -92,7 +92,9 @@ int main(int argc, char const *argv[]){
 
 void printHelp(){
 	fprintf(stdout, "Usage:\n\ttp0 -h\n\ttp0 -V\n\ttp0 [options]\n");
-	fprintf(stdout, "Options:\n\t-V, --version \tPrint version and quit.\n\t-h, --help \tPrint this information.\n\t-o, --output \tPath to output file.\n\t-i, --input \tPath to input file.\n\t-d, --decode \tDecode a base64-encoded file.\n");
+	fprintf(stdout, "Options:\n\t-V, --version \tPrint version and quit.\n\t-h, --help\
+	Print this information.\n\t-o, --output \tPath to output file.\n\t-i, --input\
+	Path to input file.\n\t-d, --decode \tDecode a base64-encoded file.\n");
 	fprintf(stdout, "Examples: \n\ttp0 -i input.txt -o output.txt\n");
 
 }
@@ -114,9 +116,9 @@ int combineBytes(char* block, size_t readBytes, bool code){
 }
 
 
-char* codification(int binaryCode, size_t readBytes){//podria recibir un booleano code = true decode = false
+char* codification(int binaryCode, size_t readBytes){
 	int shiftsLeft[] = {8, 14, 20, 26};
-	int shiftRight = 26; //ojo que cambia segun codificas o decodificas 24 si decodificas
+	int shiftRight = 26;
 	char* code = malloc(5);
 	code[0] = '=';
 	code[1] = '=';
@@ -124,8 +126,8 @@ char* codification(int binaryCode, size_t readBytes){//podria recibir un boolean
 	code[3] = '=';
 	code[4] = '\0';
 	size_t posCode = 0;
-	for (size_t i = 0; i < readBytes + 1; i++){ //1 byte -> 2 iteraciones; 2 byte -> 3 iteraciones; 3 byte -> 4 iteraciones
-		int binaryCodeAux = binaryCode; //para guardar el binario original
+	for (size_t i = 0; i < readBytes + 1; i++){
+		int binaryCodeAux = binaryCode; //Para no modificar el codigo binario original
 		binaryCodeAux = binaryCodeAux << shiftsLeft[i];
 		binaryCodeAux = (int)((unsigned) binaryCodeAux >> shiftRight);
 		code[posCode++] = BASE64[binaryCodeAux];
@@ -140,8 +142,8 @@ char* decodification(int binaryCode, size_t readBytes){
 	code[readBytes - 1] = '\0';
 
 	size_t posCode = 0;
-	for (size_t i = 0; i < readBytes - 1; i++){ //1 byte -> 2 iteraciones; 2 byte -> 3 iteraciones; 3 byte -> 4 iteraciones
-		int binaryCodeAux = binaryCode; //para guardar el binario original
+	for (size_t i = 0; i < readBytes - 1; i++){
+		int binaryCodeAux = binaryCode;
 		binaryCodeAux = binaryCodeAux << shiftsLeft[i];
 		binaryCodeAux = (int)((unsigned) binaryCodeAux >> shiftRight);
 		code[posCode++] = (char) binaryCodeAux;
