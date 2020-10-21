@@ -3,9 +3,6 @@ import sys
 import glob
 import tempfile
 
-"""
-diff <(cat  test/test1.txt) <(cat test/res_test1.txt)  
-"""
 def run_command(command):
     proc = subprocess.Popen(command, 
                             stdout=subprocess.PIPE, 
