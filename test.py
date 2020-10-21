@@ -1,7 +1,11 @@
 import subprocess
 import sys
 import glob
+import tempfile
 
+"""
+diff <(cat  test/test1.txt) <(cat test/res_test1.txt)  
+"""
 def run_command(command):
     proc = subprocess.Popen(command, 
                             stdout=subprocess.PIPE, 
@@ -24,11 +28,19 @@ def main(command, input_prefix, result_prefix):
     
     for file, output_file in test_files.values():
         result_obtained = run_command(f'{command} < {file}')[1]
-        expected_result = run_command(f'cat {output_file}')[1]
-        
-        
-
-        print(result_obtained == expected_result)
+        with tempfile.NamedTemporaryFile() as tmp:
+            tmp.write(bytes(result_obtained, encoding='utf-8'))
+            tmp.read() # TODO: No sé por qué hay que leer para que funcione
+            code_diff, stdout_diff, _ = run_command(f"""
+                diff {output_file} {tmp.name}
+            """)
+            if code_diff == 0:
+                print('.', end='')
+                continue 
+            print()
+            print(f'Ejecución con {file} comparación con {output_file}')
+            print(stdout_diff)
+    print()
 
 
 if __name__ == "__main__":

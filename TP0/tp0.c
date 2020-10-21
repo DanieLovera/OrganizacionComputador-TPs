@@ -84,7 +84,7 @@ int main(int argc, char const *argv[]){
 		resetBuffer(buffer); //Lo limpiamos para que no quede con basura en cada iteracion
 		readBytes = fread(buffer, 1, sizeof(buffer) - 1, inputFile);
 	}
-	printf("\n");
+	// printf("\n");
 	return 0;
 }
 
@@ -168,3 +168,155 @@ void resetBuffer(char* buffer){
 	size_t pos = 0;
 	while(buffer[pos] != '\0') buffer[pos++] = '\0';
 }
+
+
+cat file
+./tp0 < file
+cat file_res
+./tp0 < file | diff file_res -
+
+
+printf "--------------------------------------------"
+
+printf "\n"
+
+cat test/test1.txt
+
+printf "\n"
+
+printf "---------------------------------------------------"
+printf "\n"
+printf "cat test/test1.txt"
+printf "\n"
+cat test/test1.txt
+printf "\n"
+printf "./tp0 < test/test1.txt"
+printf "\n"
+./tp0 < test/test1.txt
+printf "\n"
+printf "cat test/res_test1.txt"
+printf "\n"
+cat test/res_test1.txt
+printf "\n"
+printf "./tp0 < test/test1.txt | diff test/res_test1.txt -"
+printf "\n"
+./tp0 < test/test1.txt | diff test/res_test1.txt -
+printf "---------------------------------------------------"
+printf "\n"
+printf "cat test/test2.txt"
+printf "\n"
+cat test/test2.txt
+printf "\n"
+printf "./tp0 < test/test2.txt"
+printf "\n"
+./tp0 < test/test2.txt
+printf "\n"
+printf "cat test/res_test2.txt"
+printf "\n"
+cat test/res_test2.txt
+printf "\n"
+printf "./tp0 < test/test2.txt | diff test/res_test2.txt -"
+printf "\n"
+./tp0 < test/test2.txt | diff test/res_test2.txt -
+printf "---------------------------------------------------"
+printf "\n"
+printf "cat test/test3.txt"
+printf "\n"
+cat test/test3.txt
+printf "\n"
+printf "./tp0 < test/test3.txt"
+printf "\n"
+./tp0 < test/test3.txt
+printf "\n"
+printf "cat test/res_test3.txt"
+printf "\n"
+cat test/res_test3.txt
+printf "\n"
+printf "./tp0 < test/test3.txt | diff test/res_test3.txt -"
+printf "\n"
+./tp0 < test/test3.txt | diff test/res_test3.txt -
+printf "---------------------------------------------------"
+printf "\n"
+printf "cat test/test4.txt"
+printf "\n"
+cat test/test4.txt
+printf "\n"
+printf "./tp0 < test/test4.txt"
+printf "\n"
+./tp0 < test/test4.txt
+printf "\n"
+printf "cat test/res_test4.txt"
+printf "\n"
+cat test/res_test4.txt
+printf "\n"
+printf "./tp0 < test/test4.txt | diff test/res_test4.txt -"
+printf "\n"
+./tp0 < test/test4.txt | diff test/res_test4.txt -
+printf "---------------------------------------------------"
+printf "\n"
+printf "cat test/test5.txt"
+printf "\n"
+cat test/test5.txt
+printf "\n"
+printf "./tp0 < test/test5.txt"
+printf "\n"
+./tp0 < test/test5.txt
+printf "\n"
+printf "cat test/res_test5.txt"
+printf "\n"
+cat test/res_test5.txt
+printf "\n"
+printf "./tp0 < test/test5.txt | diff test/res_test5.txt -"
+printf "\n"
+./tp0 < test/test5.txt | diff test/res_test5.txt -
+printf "---------------------------------------------------"
+printf "\n"
+printf "cat test/test6.txt"
+printf "\n"
+cat test/test6.txt
+printf "\n"
+printf "./tp0 < test/test6.txt"
+printf "\n"
+./tp0 < test/test6.txt
+printf "\n"
+printf "cat test/res_test6.txt"
+printf "\n"
+cat test/res_test6.txt
+printf "\n"
+printf "./tp0 < test/test6.txt | diff test/res_test6.txt -"
+printf "\n"
+./tp0 < test/test6.txt | diff test/res_test6.txt -
+printf "---------------------------------------------------"
+printf "\n"
+printf "cat test/test7.txt"
+printf "\n"
+cat test/test7.txt
+printf "\n"
+printf "./tp0 < test/test7.txt"
+printf "\n"
+./tp0 < test/test7.txt
+printf "\n"
+printf "cat test/res_test7.txt"
+printf "\n"
+cat test/res_test7.txt
+printf "\n"
+printf "./tp0 < test/test7.txt | diff test/res_test7.txt -"
+printf "\n"
+./tp0 < test/test7.txt | diff test/res_test7.txt -
+printf "---------------------------------------------------"
+printf "\n"
+printf "cat test/test8.txt"
+printf "\n"
+cat test/test8.txt
+printf "\n"
+printf "./tp0 < test/test8.txt"
+printf "\n"
+./tp0 < test/test8.txt
+printf "\n"
+printf "cat test/res_test8.txt"
+printf "\n"
+cat test/res_test8.txt
+printf "\n"
+printf "./tp0 < test/test8.txt | diff test/res_test8.txt -"
+printf "\n"
+./tp0 < test/test8.txt | diff test/res_test8.txt -
