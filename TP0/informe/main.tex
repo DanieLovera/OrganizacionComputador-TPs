@@ -11,6 +11,7 @@
 \usepackage{float}
 \usepackage{listings}
 \usepackage[table,xcdraw]{xcolor}
+\usepackage{pdfpages}
 \newcommand{\codigoMateria}{86.37 / 66.20}
 \newcommand{\nombreMateria}{[86.37 / 66.20] Organización de Computadoras}
 \newcommand{\curso}{2}
@@ -232,8 +233,6 @@ Conclusión, la longitud del resultado siempre será múltiplo de cuatro.
 
 Como detalle de implementación, aprovechando las invariantes de la multiplicidad de las longitudes de los textos, se codifican de a bloques de tres caracteres, obteniendo un bloque constante de cuatro carácteres codificados. Además, se arranca de una cadena con cuatro carácteres `=' que serán sobreescritos a medida que se codifica, limitando la ejecución con la fórmula previamente mencionada.
 
-
-% TODO: Ver si es necesario --v
 
 \subsection{Implementación función de codificación}
 
@@ -2156,6 +2155,13 @@ $L57:
 	.ident	"GCC: (Debian 6.3.0-18+deb9u1) 6.3.0 20170516"
 \end{lstlisting}
 
+\newpage
+\section{Enunciado del trabajo práctico}
+% \includepdf[pages=1, scale=0.8, frame]{tp0-q2-2020.pdf}
+\frame{
+\includegraphics[height=0.95\textheight, frame]{tp0-q2-2020.pdf}
+}
+\includepdf[pages=2-, scale=0.8, frame]{tp0-q2-2020.pdf}
 \newpage
 \section{Código auxiliar}
 \subsection{Pruebas automatizadas}
