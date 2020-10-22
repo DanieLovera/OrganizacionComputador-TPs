@@ -84,7 +84,6 @@ int main(int argc, char const *argv[]){
 		resetBuffer(buffer); //Lo limpiamos para que no quede con basura en cada iteracion
 		readBytes = fread(buffer, 1, sizeof(buffer) - 1, inputFile);
 	}
-	// printf("\n");
 	return 0;
 }
 
@@ -104,13 +103,13 @@ int combineBytes(char* block, size_t readBytes, bool code){
 	int SHIFTS = 24;
 	int mult = (code) ? 8 : 6;
 	for (int i = 0; i < readBytes; i++){
-		int shiftRight = SHIFTS - (i + 1) * mult;
+		int shiftLeft = SHIFTS - (i + 1) * mult;
 		int toShift = (code) ? (int)block[i] : findPosition(block[i]);
 		if (toShift < 0){
 			fprintf(stderr, "Error: El caracter %c no se encuentra en base 64\n", block[i]);
 			return -1;
 		}
-		resultado |= toShift << shiftRight;
+		resultado |= toShift << shiftLeft;
 	}
 	return resultado;
 }
