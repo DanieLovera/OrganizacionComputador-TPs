@@ -701,9 +701,9 @@ El tiempo de ejecución en la máquina host fue de:
     sys	 0m1,801s
 \end{verbatim}
 
-En este caso el tiempo de ejecución en la máquina guest no se pudo determinar, se cortó la ejecución del programa luego de 10 minutos aproximadamente.
+En este caso el tiempo de ejecución en la máquina guest no se pudo determinar, se cortó la ejecución del programa luego de 10 minutos aproximadamente. Se plantea la hipótesis de que al ser un entorno de simulación (QEMU), no se contaría con los mismos recursos que en la máquina host, reduciendo así la capacidad de procesamiento, haciendo que el programa no termine en un tiempo razonable. 
 
-\section{Pruebas con archivos binarios}
+\subsection{Pruebas con archivos binarios}
 
 Para estas pruebas se utilizaron los siguientes comandos:
 
