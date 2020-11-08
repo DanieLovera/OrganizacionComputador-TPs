@@ -61,7 +61,6 @@ int parse_argv(int argc, char *argv[], FILE* output_file,
 	int option_index = 0;
 	while ((opt = getopt_long(argc, argv, "hVo:dm", argument_options, 
 														&option_index)) != -1) {
-		int this_option_optind = optind ? optind : 1;
 		switch (opt) {
 		case 'h':
 			show_usage();
@@ -99,10 +98,10 @@ int parse_argv(int argc, char *argv[], FILE* output_file,
 		case '?':
 			// TODO: Hacer un tratado mejor de errores
 			show_usage();
-			break;
+			exit(EXIT_FAILURE);
 		default:
 			show_usage();
-			break;
+			exit(EXIT_FAILURE);
 		}
 		option_index = 0;
 	}
@@ -111,7 +110,7 @@ int parse_argv(int argc, char *argv[], FILE* output_file,
 
 
 int main(int argc, char *argv[]) {
-	FILE* output_file = stdin;
+	FILE* output_file = stdout;
 	bin_operation_t functions[] = {
 		mcd_euclides,
 		mcm_euclides
@@ -139,7 +138,7 @@ int main(int argc, char *argv[]) {
 		functions_to_run = MAX_FUNCTIONS_TO_RUN;
 
 	for (int i = 0; i < functions_to_run; i++) {
-		unsigned int result = functions[i](a, b);
+		unsigned int result = bin_operation_decorator(functions[i], a, b);
 		if (result == INVALID_RESULT) {
 			fprintf(stderr, "Número fuera de rango [%d, %d).\n", 
 											MIN_VALUE_INPUT, MAX_VALUE_INPUT);
