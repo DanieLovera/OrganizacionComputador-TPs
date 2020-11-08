@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
 		fprintf(output_file, "%u\n", result);
 	}
 
-	if (output_file != stdin)
+	if (output_file != stdout)
 		fclose(output_file);
 
 	return EXIT_SUCCESS;
