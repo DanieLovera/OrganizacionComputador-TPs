@@ -1,2 +1,6 @@
-### Comando para compilar en el qemu ###
-gcc -ggdb -mips32 mcd_euclides.S mcm_euclides.S main.c -o main
+### Comando para compilar en el qemu 
+make
+
+### Comando para eliminar los programas generados por el make
+make clean
+
