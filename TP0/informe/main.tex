@@ -105,8 +105,8 @@ Familiarización de las herramientas de software utilizadas por la cátedra:
 
 \section{Introducción}\label{sec:intro}
 En el presente informe se plantea la resolución de un programa en C que permite la codificación Base64, el programa es controlado por una serie de comandos que permiten seleccionar entre codificación o decodificación así como el origen y el destino de estos datos.
-\newline 
-Base64 se creó con el fin de poder transmitir archivos binarios en medios que solo admitían texto, debe su nombre a que 64 es la mayor potencia de 2 que puede ser representada usando unicamente caracteres ASCII imprimibles, los primeros 62 dígitos de la tabla de símbolos corresponden a las letras del alfabeto latino (mayúsculas y minúsculas) y los ultimos 2 suelen variar dependiendo del tipo de implementación que se realice, en este trabajo se consideraron los simbolos + y / como ultimos dígitos.
+
+Base64 se creó con el fin de poder transmitir archivos binarios en medios que solo admitían texto, debe su nombre a que 64 es la mayor potencia de 2 que puede ser representada usando únicamente caracteres ASCII imprimibles, los primeros 62 dígitos de la tabla de símbolos corresponden a las letras del alfabeto latino (mayúsculas y minúsculas) y los últimos 2 suelen variar dependiendo del tipo de implementación que se realice, en este trabajo se consideraron los símbolos \verb|+| y \verb|/| como últimos dígitos.
 
 %\section{Programa a implementar}\label{sec:programa_a_implementar}
 %Utilizando el lenguaje `C' se implementa un codificador y %decodificador de texto en base64. La entrada será un archivo %especificado en el comando o el \textit{stdin} si ninguno es %especificado, y la salida será otro archivo también especificado en %el comando o el \textit{stdout} si ninguno es especificado.
@@ -114,7 +114,7 @@ Base64 se creó con el fin de poder transmitir archivos binarios en medios que s
 \section{Detalles de implementación}\label{sec:detalles_implementacion}
 
 \subsection{Base64}
-Es un sistema de numeración posicional cuya base es 64 \cite{base64}. Se utilizará para codificar una secuencia de caracteres a un subconjunto de caracteres \verb|ascii|. El proceso de codificación consiste en tomar el texto que se quiere codificar, formar una secuencia de bytes con el equivalente de cada carácter con su valor en binario del código \verb|ascii| \cite{ascii_table}. Por ejemplo \ref{table:paso_1}:
+Es un sistema de numeración posicional cuya base es 64 \cite{base64}. Se utilizará para codificar una secuencia de caracteres a un subconjunto de caracteres \verb|ascii|. El proceso de codificación consiste en tomar el texto que se quiere codificar, formar una secuencia de bytes con el equivalente de cada carácter con su valor en binario del código \verb|ascii| \cite{ascii_table}. Por ejemplo en el cuadro \ref{table:paso_1}:
 
 \begin{table}[H]
 \centering
@@ -128,7 +128,7 @@ Binario           & 01000011 & 01101111 & 01110011
 \centering
 \end{table}
 
-Una vez obtenida la secuencia de bits (cuya longitud siempre será un múltiplo de ocho), se tomaran cada seis bits (tomandolo de izquierda a derecha), obteniendo \ref{table:paso_2}:
+Una vez obtenida la secuencia de bits (cuya longitud siempre será un múltiplo de ocho), se tomaran cada seis bits (tomándolo de izquierda a derecha), obteniendo el cuadro \ref{table:paso_2}:
 
 \begin{table}[H]
 \centering
@@ -145,7 +145,7 @@ Binario           &0& 1 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 1 & 1 & 1 & 1 
 \centering
 \end{table}
 
-Como se puede ver \ref{table:paso_2}, cada tres carácteres en el texto original, se generan cuatro secuencias de seis bits completos, esto permite codificar desde secuencias fijas de tres bytes. 
+Como se puede ver en el cuadro \ref{table:paso_2}, cada tres caracteres en el texto original, se generan cuatro secuencias de seis bits completos, esto permite codificar desde secuencias fijas de tres bytes. 
 
 Dado que se toman de a seis bits, el mayor índice será 63 ($2^{6} - 1 = 63$, obteniendo el rango [0, 63] índices posibles). Una vez obtenidos estos índices se mapean a un carácter \verb|ascii| del cuadro \ref{table:equivalencias}.
 
@@ -187,7 +187,7 @@ Dado que se toman de a seis bits, el mayor índice será 63 ($2^{6} - 1 = 63$, o
 \rowcolor[HTML]{F8F9FA} 
 {\color[HTML]{202122} 15}             & {\color[HTML]{202122} P}                 & {\color[HTML]{202122} 31}             & {\color[HTML]{202122} f}                 & {\color[HTML]{202122} 47}             & {\color[HTML]{202122} v}                 & {\color[HTML]{202122} 63}             & {\color[HTML]{202122} /}                
 \end{tabular}
-\caption{Tabla de equivalencias entre carácteres con su equivalente decimal codificado}
+\caption{Tabla de equivalencias entre caracteres con su equivalente decimal codificado}
 \label{table:equivalencias}
 \centering
 \end{table}
@@ -202,7 +202,7 @@ Binario           &0& 1 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 1 & 1 & 1 & 1 
 Índice & \multicolumn{6}{c||}{16} & \multicolumn{6}{c||}{54} & \multicolumn{6}{c||}{61} & \multicolumn{6}{c}{51} \\
 Codificado & \multicolumn{6}{c||}{Q} & \multicolumn{6}{c||}{2} & \multicolumn{6}{c||}{9} & \multicolumn{6}{c}{z}
 \end{tabular}
-\caption{Mapeo de índices a carácteres}
+\caption{Mapeo de índices a caracteres}
 \label{table:paso_3}
 \centering
 \end{table}
@@ -210,7 +210,7 @@ Codificado & \multicolumn{6}{c||}{Q} & \multicolumn{6}{c||}{2} & \multicolumn{6}
 Pasando así del texto `\textbf{Cos}' a `\textbf{Q29z}'.
 
 \subsubsection{Caso borde}
-Cuando la secuencia a codificar no es múltiplo de tres, no se logran reagrupar los bytes en conjuntos de seis bits, con lo cual, en este caso, se completan con ceros los bits restantes y se procede a codificar de la forma explicada previamente, salvo que los conjuntos de seis bits que queden en cero por la limpieza anterior serán codificadas por el carácter `\textbf{=}'. En cada conjunto de cuatro letras resultantes se pueden obtener {0, 1, 2} carácteres `\textbf{=}' dependiendo de la longitud original del texto a codificar, siguiendo la fórmula $|txt_{codificado}|_{`='} = 3 - |txt_{codificar}|$ donde $|.|$ es la longitud del texto. Ejemplo:
+Cuando la secuencia a codificar no es múltiplo de tres, no se logran reagrupar los bytes en conjuntos de seis bits, con lo cual, en este caso, se completan con ceros los bits restantes y se procede a codificar de la forma explicada previamente, salvo que los conjuntos de seis bits que queden en cero por la limpieza anterior serán codificadas por el carácter `\textbf{=}'. En cada conjunto de cuatro letras resultantes se pueden obtener {0, 1, 2} caracteres `\textbf{=}' dependiendo de la longitud original del texto a codificar, siguiendo la fórmula $|txt_{codificado}|_{`='} = 3 - |txt_{codificar}|$ donde $|.|$ es la longitud del texto. Ejemplo:
 
 \begin{table}[H]
 \centering
@@ -227,16 +227,17 @@ Codificado & \multicolumn{6}{c||}{Q} & \multicolumn{6}{c||}{w} & \multicolumn{6}
 \centering
 \end{table}
 
-En este caso, partiendo de `\textbf{C}' se obtiene `\textbf{Qw==}'. Se puede ver que se cumple con la fórula, dado que la longitud del texto original $|txt_{codificar}| = 1$ se cumple que la cantidad de iguales en el texto codificado es $|txt_{codificado}|_{`='} = 3 - 1 = 2$.
+En este caso, partiendo de `\textbf{C}' se obtiene `\textbf{Qw==}'. Se puede ver que se cumple con la fórmula, dado que la longitud del texto original $|txt_{codificar}| = 1$ se cumple que la cantidad de iguales en el texto codificado es $|txt_{codificado}|_{`='} = 3 - 1 = 2$.
+\newline
 
 Conclusión, la longitud del resultado siempre será múltiplo de cuatro.
 
-Como detalle de implementación, aprovechando las invariantes de la multiplicidad de las longitudes de los textos, se codifican de a bloques de tres caracteres, obteniendo un bloque constante de cuatro carácteres codificados. Además, se arranca de una cadena con cuatro carácteres `=' que serán sobreescritos a medida que se codifica, limitando la ejecución con la fórmula previamente mencionada.
+Como detalle de implementación, aprovechando las invariantes de la multiplicidad de las longitudes de los textos, se codifican de a bloques de tres caracteres, obteniendo un bloque constante de cuatro caracteres codificados. Además, se arranca de una cadena con cuatro caracteres `=' que serán sobrescritos a medida que se codifica, limitando la ejecución con la fórmula previamente mencionada.
 
 
 \subsection{Implementación función de codificación}
 
-En primer lugar se leen 3 bytes del archivo pasado por parámetro al programa y se los almacena en un \textit{buffer}, luego este es pasado a la función \textit{combineBytes} para obtener un código binario de los bytes leidos. A continuación se muestra el código de dicha función:
+En primer lugar se leen 3 bytes del archivo pasado por parámetro al programa y se los almacena en un \textit{buffer}, luego este es pasado a la función \textit{combineBytes} para obtener un código binario de los bytes leídos. A continuación se muestra el código de dicha función:
 
 \begin{lstlisting}[style=customC]
 int combineBytes(char* block, size_t readBytes, bool code){
@@ -256,15 +257,15 @@ int combineBytes(char* block, size_t readBytes, bool code){
 }
 \end{lstlisting}
 
-El párametro \textit{code} es un booleano que sirve para saber si tenemos que codificar o decodificar el buffer. Dado que en ambos casos se debe realizar un shift a izquierda primero de cierta cantidad de bits para alinearlos de manera correcta y que sea trivial la separación en la codificacion. Se encontró una relación para hacerlo, la misma es la siguiente: $$ 24 - (i + 1) * mult $$
+El parámetro \textit{code} es un booleano que sirve para saber si tenemos que codificar o decodificar el buffer. Dado que en ambos casos se debe realizar un shift a izquierda primero de cierta cantidad de bits para alinearlos de manera correcta y que sea trivial la separación en la codificación. Se encontró una relación para hacerlo, la misma es la siguiente: $$ 24 - (i + 1) * mult $$
 
-En caso de estar codificando mult debe valer 8 y en caso contrario 6. Luego realizamos un loop en el cual la cantidad de iteraciones está dada por la cantidad de bytes leidos anteriormente. En cada iteración la cantidad de bits a desplazar hacia la izquierda se va adaptando hasta que no sea necesario un nuevo desplazamiento, así obtenemos el código binario de manera correcta. \newline
+En caso de estar codificando \verb|mult| debe valer 8 y en caso contrario 6. Luego realizamos un \verb|loop| en el cual la cantidad de iteraciones está dada por la cantidad de bytes leídos anteriormente. En cada iteración la cantidad de bits a desplazar hacia la izquierda se va adaptando hasta que no sea necesario un nuevo desplazamiento, así obtenemos el código binario de manera correcta. \newline
 
-La variable \textit{toShift} contiene un entero que representa el código ASCII o el código en Base64, en caso de estar decodificando y que el caracter no se encuentre en la tabla de simbolos de Base64, \textit{findPosition} devolverá -1 lo cual hará que la sentencia del if sea verdadera y se imprimirá el mensaje por \textit{stderr}.\newline
+La variable \textit{toShift} contiene un entero que representa el código ASCII o el código en Base64, en caso de estar decodificando y que el carácter no se encuentre en la tabla de símbolos de Base64, \textit{findPosition} devolverá -1 lo cual hará que la sentencia del \verb|if| sea verdadera y se imprimirá el mensaje por \textit{stderr}.\newline
 
 En caso de que no haya ningún error, la ejecución continua y se realiza el shift correspondiente. \newline
 
-Una vez que la función devuelve el código binario de los bytes leidos del archivo se pasa el resultado a la función \textit{codification}:
+Una vez que la función devuelve el código binario de los bytes leídos del archivo se pasa el resultado a la función \textit{codification}:
 
 \begin{lstlisting}[style=customC]
 char* codification(int binaryCode, size_t readBytes){
@@ -287,11 +288,11 @@ char* codification(int binaryCode, size_t readBytes){
 }
 \end{lstlisting}
 
-Primero se utiliza memoria dinámica para crear un arreglo de caracteres que contendrá el resultado de la codificación y se inicializa cada posición con el caracter '=' para solucionar los casos bordes en los cuales la cantidad de bytes leidos es menor a 3. \newline
+Primero se utiliza memoria dinámica para crear un arreglo de caracteres que contendrá el resultado de la codificación y se inicializa cada posición con el carácter `=' para solucionar los casos bordes en los cuales la cantidad de bytes leídos es menor a 3. \newline
 
-Posteriormente se realiza una cantidad de iteraciones igual al número de bytes leidos más 1 (se suma 1 ya que en caso de leer 3 bytes debemos tener un total de 4 caracteres como resultado de la codificación). \newline
+Posteriormente se realiza una cantidad de iteraciones igual al número de bytes leídos más 1 (se suma 1 ya que en caso de leer 3 bytes debemos tener un total de 4 caracteres como resultado de la codificación). \newline
 
-En cada iteración se realiza un shift de manera tal que los 6 bits necesarios para la codificación queden en la parte más significativa y luego se desplaza a derecha 26 bits en todos los casos para obtener un número representado de 6 bits, cuyo valor es el código a buscar en la tabla \ref{table:equivalencias} para saber qué caracter representa en Base64 y se posteriormente se lo almacena en el arreglo. \newline
+En cada iteración se realiza un shift de manera tal que los 6 bits necesarios para la codificación queden en la parte más significativa y luego se desplaza a derecha 26 bits en todos los casos para obtener un número representado de 6 bits, cuyo valor es el código a buscar en la tabla \ref{table:equivalencias} para saber qué carácter representa en Base64 y se posteriormente se lo almacena en el arreglo. \newline
 
 
 \subsection{Implementación función de decodificación}
@@ -305,7 +306,6 @@ char* decodification(int binaryCode, size_t readBytes){
 	int shiftRight = 24; 
 	char* code = malloc(readBytes);
 	code[readBytes - 1] = '\0';
-
 	size_t posCode = 0;
 	for (size_t i = 0; i < readBytes - 1; i++){
 		int binaryCodeAux = binaryCode;
@@ -317,9 +317,9 @@ char* decodification(int binaryCode, size_t readBytes){
 }
 \end{lstlisting}
 
-En este caso las iteraciones a realizar son la cantidad de bytes leidos menos 1, ya que 4 bytes en base 64 equivalen a 3 bytes al realizar la decodificación. \newline
+En este caso las iteraciones a realizar son la cantidad de bytes leídos menos 1, ya que 4 bytes en base 64 equivalen a 3 bytes al realizar la decodificación. \newline
 
-Al igual que con la función \textit{codification} realizamos los shifts correspondientes a izquierda de manera que nos quede en los bits más significativos el valor del caracter que hay que decodificar. Luego realizamos un shift a derecha de 24 bits, de esta forma nos queda un número representado en 8 bits del cual obtenemos su correspondiente valor y el caracter que representa en la tabla ASCII. 
+Al igual que con la función \textit{codification} realizamos los shifts correspondientes a izquierda de manera que nos quede en los bits más significativos el valor del carácter que hay que decodificar. Luego realizamos un shift a derecha de 24 bits, de esta forma nos queda un número representado en 8 bits del cual obtenemos su correspondiente valor y el carácter que representa en la tabla ASCII. 
 
 \section{Compilación y ejecución}
 
@@ -336,10 +336,10 @@ Para generar el código assembly en el sistema MIPS32:
 
 Los parámetros que recibe \verb|gcc|  \cite{gcc_parameters} se utilizan:
 \begin{itemize}
-    \item \textbf{-O0} desactiva las optimizaciones que realiza el compilador abitualmente.
+    \item \textbf{-O0} desactiva las optimizaciones que realiza el compilador habitualmente.
     
-    \item \textbf{-S} compila el código hasta el esamblado.
-    \item \textbf{-Wall} devolvera todos los \textit{warnings} posibles por el compilador.
+    \item \textbf{-S} compila el código hasta el ensamblado.
+    \item \textbf{-Wall} devolverá todos los \textit{warnings} posibles por el compilador.
     \item \textbf{-Werror} tratará los \textit{warnings} como errores.
 \end{itemize}
 
@@ -629,12 +629,101 @@ Ahora, a partir de esta estructura, se puede probar la funcionalidad de decodifi
 
 Donde ahora se está ejecutando el programa en modo \verb|decode| (\textbf{-d}), los archivos de entrada serán los textos codificados y los de comparación serán los no codificados.
 
-Ejecutandolo se obtiene:
+Ejecutándolo se obtiene:
 \begin{verbatim}
     $ python test.py "./tp0 -d" test/res_test test/test
     ........
 \end{verbatim}
 Indicando que pasaron todas las pruebas.
+
+\subsection{Pruebas de volumen}
+
+Para cada uno de los casos que se detallan a continuación se realizaron varias ejecuciones del programa y se tomó la moda.
+
+\subsubsection{Caso 1: 1Kb}
+
+Para este caso se utilizó:
+\begin{verbatim}
+    $ time head -c $((1024)) /dev/zero | ./tp0 > /dev/null
+\end{verbatim}
+
+El tiempo de ejecución en la máquina host fue de:
+
+\begin{verbatim}
+    real	0m0,005s
+    user	0m0,003s
+    sys	 0m0,005s
+\end{verbatim}
+
+Mientras que en la máquina guest fue:
+
+\begin{verbatim}
+    real	0m0,162s
+    user	0m0,120s
+    sys	 0m0,036s
+\end{verbatim}
+
+\subsubsection{Caso 2: 1Mb}
+
+El comando para este caso fue:
+\begin{verbatim}
+    $ time head -c $((1024 * 1024)) /dev/zero | ./tp0 > /dev/null
+\end{verbatim}
+
+El tiempo de ejecución en la máquina host fue de:
+
+\begin{verbatim}
+    real	0m0,108s
+    user	0m0,106s
+    sys	 0m0,010s
+\end{verbatim}
+
+Y en la máquina guest fue:
+
+\begin{verbatim}
+    real	0m3,961s
+    user	0m3,808s
+    sys	 0m0,144s
+\end{verbatim}
+
+\subsubsection{Caso 3: 1Gb}
+
+Al igual que en el caso anterior, debemos modificar una vez más el comando multipicandolo  por 1024, el cual nos queda:
+\begin{verbatim}
+    $ time head -c $((1024 * 1024 * 1024)) /dev/zero | ./tp0 > /dev/null
+\end{verbatim}
+
+El tiempo de ejecución en la máquina host fue de:
+
+\begin{verbatim}
+    real	0m30,398s
+    user	0m30,301s
+    sys	 0m1,801s
+\end{verbatim}
+
+En este caso el tiempo de ejecución en la máquina guest no se pudo determinar, se cortó la ejecución del programa luego de 10 minutos aproximadamente. Se plantea la hipótesis de que al ser un entorno de simulación (QEMU), no se contaría con los mismos recursos que en la máquina host, reduciendo así la capacidad de procesamiento, haciendo que el programa no termine en un tiempo razonable. 
+
+\subsection{Pruebas con archivos binarios}
+
+Para estas pruebas se utilizaron los siguientes comandos:
+
+\begin{verbatim}
+    $ head -25 /dev/urandom | ./tp0
+    $ head -50 /dev/urandom | ./tp0
+    $ head -100 /dev/urandom | ./tp0
+\end{verbatim}
+
+En todos los casos se obtuvo el mismo resultado:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{images/errorArchivoBinario.png}
+\caption{Resultado de las pruebas con archivos binarios}
+\label{fig:errorBinario}
+\end{figure}
+
+Esto ocurre porque la codificación en base64 trabaja con un conjunto de valores correspondientes a la tabla ASCII y cuando se ingresan caracteres que no pertenecen a esta tabla no puede codificarlos y falla.
+
 
 \section{Código}
 \subsection{Código en C}
@@ -645,7 +734,19 @@ Ver apéndice \ref{apendice:codigo_assembly}
 
 \section{Conclusiones}
 
-Se realizo un programa totalmente funcional que permite la codificacion de texto a Base64 y recibe instrucciones por línea de comandos, se incluyeron pruebas que corroboran la validez del código y se logró obtener el código assembly específico de la arquitectura MIPS. Esto permitió el entendimiento de herramientas necesarias por la cátedra así como chequear su funcionamiento.
+Se realizo un programa totalmente funcional que permite la codificación de texto a Base64 y recibe instrucciones por línea de comandos, se incluyeron pruebas que corroboran la validez del código y se logró obtener el código assembly específico de la arquitectura MIPS. Esto permitió el entendimiento de herramientas necesarias por la cátedra así como chequear su funcionamiento. \newline
+
+Se realizaron pruebas con archivos de texto, binarios y archivos de gran tamaño y las conclusiones son las siguientes:
+\begin{itemize}
+    \item Todas las pruebas con archivos de textos resultaron exitosas, se validaron los casos bordes en donde el programa era posible que fallara en la codificación y regresando los mismos archivos a su forma de texto se comprobó que la decodificación también era correcta.
+    
+    \item No todas las pruebas con archivos binarios resultan exitosas, en ciertos casos se obtiene un carácter que no se encuentra en la tabla de índice de base64 lo cual vuelve imposible la codificación del archivo, razón por la cual el programa lanza el error que se muestra en la figura \ref{fig:errorBinario}.
+    
+    \item Al realizar pruebas con grandes entradas de datos el programa funciona correctamente en la máquina host, tardando relativamente poco (menos de un minuto aproximadamente). Sin embargo, al ejecutar el mismo programa con el mismo archivo de entrada en la máquina guest (MIPS32) el mismo es muchísimo más lento, al punto que se tuvo que detener la ejecución del programa 10 minutos después de iniciar y no se pudo determinar el tiempo total de ejecución.
+    
+    \item Al realizar la misma prueba (de volumen) con un mega de bytes en lugar de un giga en la máquina host se obtiene un tiempo de ejecución mucho menor a la maquina guest, en esta ocasión no fue necesario detener la ejecución pues el programa dio el resultado esperado, sin embargo se puede notar como al cambiar entorno de ejecución el programa se ralentiza al punto de ser aproximadamente 27 veces más lento (2.744s -tiempo en máquina guest y 0,100s -tiempo en máquina host).
+    
+\end{itemize}
 
 \newpage
 \appendix
@@ -2155,11 +2256,11 @@ $L57:
 	.ident	"GCC: (Debian 6.3.0-18+deb9u1) 6.3.0 20170516"
 \end{lstlisting}
 
-\newpage
+% \newpage
 \section{Enunciado del trabajo práctico}
 % \includepdf[pages=1, scale=0.8, frame]{tp0-q2-2020.pdf}
 \frame{
-\includegraphics[height=0.95\textheight, frame]{tp0-q2-2020.pdf}
+\includegraphics[height=0.93\textheight, frame]{tp0-q2-2020.pdf}
 }
 \includepdf[pages=2-, scale=0.8, frame]{tp0-q2-2020.pdf}
 \newpage
