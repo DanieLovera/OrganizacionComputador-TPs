@@ -1,4 +1,4 @@
-#include "euclides_algorithms.h"
+#include "euclides_algorithm.h"
 
 unsigned int mcd_euclides(unsigned int a, unsigned int b) {
 	unsigned int r = 0;
