@@ -51,7 +51,7 @@ int parse_argv(int argc, char *argv[], FILE* output_file,
 	static struct option argument_options[] = {
 		{"help", no_argument, 0, 'h'},
 		{"version", no_argument, 0, 'V'},
-		{"output", optional_argument, 0, 'o'},
+		{"output", required_argument, 0, 'o'},
 		{"divisor", no_argument, 0, 'd'},
 		{"multiple", no_argument, 0, 'm'},
 		{0, 0, 0, 0} // Lo pide getopt
