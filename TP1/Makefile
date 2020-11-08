@@ -24,4 +24,7 @@ mcm_euclides.o: mcm_euclides.S
 clean:
 	rm -f *.o $(TARGET)
 
+testing:
+	python3 test.py ./common test/args_ test/res_ test/stderr_
+
 .PHONY: all clean
