@@ -20,48 +20,6 @@ extern unsigned int mcm_euclides(unsigned int a, unsigned int b);
 
 typedef unsigned int (*bin_operation_t) (unsigned int, unsigned int);
 
-bool is_in_range(unsigned int value, unsigned int min, unsigned int max) {
-	return min <= value && value < max;
-}
-
-int is_a_number(char* num){
-	if (num[0] != '-' && !isdigit(num[0])) return ALPHA_ERROR;
-
-	if (num[0] == '-' || isdigit(num[0])){
-		for (size_t i = 1; i < strlen(num); i++){
-			if (!isdigit(num[i])) return ALPHA_ERROR;
-		}
-		if (num[0] == '-') return NEGATIVE_ERROR;
-
-		return CORRECT_INPUT;
-	}
-
-	return ALPHA_ERROR;
-}
-
-bool correct_input(char* num1, char* num2){
-	int result_1 = is_a_number(num1);
-	int result_2 = is_a_number(num2);
-	if (result_1 + result_2 == CORRECT_INPUT) return true;
-
-	if (result_1 == ALPHA_ERROR || result_2 == ALPHA_ERROR){
-		fprintf(stderr, "Error: deben ingresarse numeros no cadenas de texto\n");
-		return false;
-	}
-
-	fprintf(stderr, "Error: Los numeros ingresados deben ser positivos y estar en el rango [%d, %d]\n", MIN_VALUE_INPUT,
-		MAX_VALUE_INPUT);
-
-}
-
-unsigned int bin_operation_decorator(bin_operation_t operation, unsigned int a, 
-									 unsigned int b) {
-	if (!is_in_range(a, MIN_VALUE_INPUT, MAX_VALUE_INPUT) || 
-		!is_in_range(b, MIN_VALUE_INPUT, MAX_VALUE_INPUT))
-		return INVALID_RESULT;
-	return operation(a, b);
-}
-
 void show_usage() {
 	printf("Usage:\n"
 		   "	common -h\n"
@@ -138,6 +96,50 @@ int parse_argv(int argc, char *argv[], FILE* output_file,
 	return optind;
 }
 
+bool is_in_range(unsigned int value, unsigned int min, unsigned int max) {
+	return min <= value && value < max;
+}
+
+bool is_a_number(char* num) {
+	if (num[0] != '-' && !isdigit(num[0])) 
+		return false;
+
+	size_t len_number = strlen(num);
+	for (size_t i = 1; i < len_number; i++){
+		if (!isdigit(num[i])) 
+			return false;
+	}
+	return true;
+}
+
+bool is_valid_input(char* num1, char* num2) {
+	return is_a_number(num1) && !is_a_number(num2)
+}
+
+
+bool extract_numbers_parameters(char *argv[], size_t last_index, 
+											unsigned int &a, unsigned int &a) {
+	if (!argv[last_index] || !argv[last_index + 1]) {
+		fprintf(stderr, "Error: Faltan los números.\n");
+		return false;
+	}
+
+	if (!is_a_number(argv[last_index]) || !is_a_number(argv[last_index + 1]))) {
+		fprintf(stderr, "Error: deben ingresarse numeros no cadenas de texto\n");
+		return false;
+	}
+
+	*a = atoi(argv[last_index]);
+	*b = atoi(argv[last_index + 1]);
+
+	if (!is_in_range(a, MIN_VALUE_INPUT, MAX_VALUE_INPUT) || 
+		!is_in_range(b, MIN_VALUE_INPUT, MAX_VALUE_INPUT)) {
+		fprintf(stderr, "Número fuera de rango [%d, %d).\n", 
+											MIN_VALUE_INPUT, MAX_VALUE_INPUT);
+		return false;
+	}
+	return true;
+}
 
 int main(int argc, char *argv[]) {
 	FILE* output_file = stdout;
@@ -155,29 +157,17 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	
-	if (!argv[last_index] || !argv[last_index + 1]) {
-		fprintf(stderr, "Faltan los números.\n");
-		show_usage();
+	unsigned int a;
+	unsigned int b;
+	if (!extract_numbers_parameters(argv, last_index, &a, &b)) 
 		exit(EXIT_FAILURE);
-	}
-
-	if(!correct_input(argv[last_index], argv[last_index + 1])) exit(EXIT_FAILURE);
-
-	unsigned int a = atoi(argv[last_index]);
-	unsigned int b = atoi(argv[last_index + 1]);
-
+	
 	if (functions_to_run == 0)
 		functions_to_run = MAX_FUNCTIONS_TO_RUN;
 
-	for (int i = 0; i < functions_to_run; i++) {
-		unsigned int result = bin_operation_decorator(functions[i], a, b);
-		if (result == INVALID_RESULT) {
-			fprintf(stderr, "Número fuera de rango [%d, %d).\n", 
-											MIN_VALUE_INPUT, MAX_VALUE_INPUT);
-			break;
-		}
-		fprintf(output_file, "%u\n", result);
-	}
+	for (int i = 0; i < functions_to_run; i++)
+		fprintf(output_file, "%u\n", functions[i](a, b));
+
 
 	if (output_file != stdout)
 		fclose(output_file);
