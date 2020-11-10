@@ -64,7 +64,7 @@ int parse_argv(int argc, char *argv[], FILE* output_file,
 			if (strcmp(optarg, STDIN_PARAM_IDENTIFIER) != 0) {
 				output_file = fopen(optarg, "w");
 				if (!output_file) {
-					fprintf(stderr, "No se pudo abrir el archivo %s\n", optarg);
+					fprintf(stderr, "Error: No se pudo abrir el archivo %s\n", optarg);
 					exit(EXIT_FAILURE);
 				}
 			}
@@ -112,19 +112,14 @@ bool is_a_number(char* num) {
 	return true;
 }
 
-bool is_valid_input(char* num1, char* num2) {
-	return is_a_number(num1) && !is_a_number(num2)
-}
-
-
 bool extract_numbers_parameters(char *argv[], size_t last_index, 
-											unsigned int &a, unsigned int &a) {
+											unsigned int *a, unsigned int *b) {
 	if (!argv[last_index] || !argv[last_index + 1]) {
 		fprintf(stderr, "Error: Faltan los números.\n");
 		return false;
 	}
 
-	if (!is_a_number(argv[last_index]) || !is_a_number(argv[last_index + 1]))) {
+	if (!is_a_number(argv[last_index]) || !is_a_number(argv[last_index + 1])) {
 		fprintf(stderr, "Error: deben ingresarse numeros no cadenas de texto\n");
 		return false;
 	}
@@ -132,9 +127,9 @@ bool extract_numbers_parameters(char *argv[], size_t last_index,
 	*a = atoi(argv[last_index]);
 	*b = atoi(argv[last_index + 1]);
 
-	if (!is_in_range(a, MIN_VALUE_INPUT, MAX_VALUE_INPUT) || 
-		!is_in_range(b, MIN_VALUE_INPUT, MAX_VALUE_INPUT)) {
-		fprintf(stderr, "Número fuera de rango [%d, %d).\n", 
+	if (!is_in_range(*a, MIN_VALUE_INPUT, MAX_VALUE_INPUT) || 
+		!is_in_range(*b, MIN_VALUE_INPUT, MAX_VALUE_INPUT)) {
+		fprintf(stderr, "Error: Número fuera de rango [%d, %d).\n", 
 											MIN_VALUE_INPUT, MAX_VALUE_INPUT);
 		return false;
 	}
@@ -153,7 +148,7 @@ int main(int argc, char *argv[]) {
 								&functions_to_run);
 
 	if (!output_file) {
-		fprintf(stderr, "No se pudo acceder al archivo de salida.\n");
+		fprintf(stderr, "Error: No se pudo acceder al archivo de salida.\n");
 		exit(EXIT_FAILURE);
 	}
 	
