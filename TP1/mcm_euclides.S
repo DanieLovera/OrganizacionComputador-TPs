@@ -68,7 +68,8 @@ mcm_euclides:
 	/* unsigned int a_x_b = (a * b); */
 	lw t0, O_A0(fp)
 	lw t1, O_A1(fp)
-	mul t0, t0, t1
+	multu t0, t1
+	mflo t0
 	sw t0, O_L1(fp)
 
 return:
