@@ -8,12 +8,8 @@
 
 #define MAX_FUNCTIONS_TO_RUN 2
 #define STDIN_PARAM_IDENTIFIER "-"
-#define INVALID_RESULT 0
 #define MIN_VALUE_INPUT 2
 #define MAX_VALUE_INPUT INT_MAX
-#define CORRECT_INPUT 0
-#define ALPHA_ERROR 1
-#define NEGATIVE_ERROR 2
 
 extern unsigned int mcd_euclides(unsigned int a, unsigned int b);
 extern unsigned int mcm_euclides(unsigned int a, unsigned int b);
@@ -51,8 +47,10 @@ int parse_argv(int argc, char *argv[], FILE* output_file,
 
 	int opt;
 	int option_index = 0;
+	int last_index = 1;
 	while ((opt = getopt_long(argc, argv, "hVo:dm", argument_options, 
 														&option_index)) != -1) {
+		bool should_update_index = true;
 		switch (opt) {
 		case 'h':
 			show_usage();
@@ -68,6 +66,7 @@ int parse_argv(int argc, char *argv[], FILE* output_file,
 					exit(EXIT_FAILURE);
 				}
 			}
+			last_index++;
 			break;
 		case 'd':
 			functions[(*functions_to_run)++] = mcd_euclides;
@@ -75,25 +74,15 @@ int parse_argv(int argc, char *argv[], FILE* output_file,
 		case 'm':
 			functions[(*functions_to_run)++] = mcm_euclides;
 			break;
-		case 0:
-			// TODO: Se supone que todos los valores están contemplados en los 
-			// case anteriores.
-			printf("long option %s", argument_options[option_index].name);
-			if (optarg) 
-				printf(" with arg %s", optarg);
-			printf("\n");
-			break;
-		case '?':
-			// TODO: Hacer un tratado mejor de errores
-			show_usage();
-			exit(EXIT_FAILURE);
 		default:
-			show_usage();
-			exit(EXIT_FAILURE);
+			should_update_index = false;
+			break;
 		}
 		option_index = 0;
+		if (should_update_index)
+			last_index++;
 	}
-	return optind;
+	return last_index;
 }
 
 bool is_in_range(unsigned int value, unsigned int min, unsigned int max) {
@@ -112,20 +101,20 @@ bool is_a_number(char* num) {
 	return true;
 }
 
-bool extract_numbers_parameters(char *argv[], size_t last_index, 
+bool extract_numbers_parameters(char *str_a, char *str_b, 
 											unsigned int *a, unsigned int *b) {
-	if (!argv[last_index] || !argv[last_index + 1]) {
+	if (!str_a || !str_b) {
 		fprintf(stderr, "Error: Faltan los números.\n");
 		return false;
 	}
 
-	if (!is_a_number(argv[last_index]) || !is_a_number(argv[last_index + 1])) {
+	if (!is_a_number(str_a) || !is_a_number(str_b)) {
 		fprintf(stderr, "Error: deben ingresarse numeros no cadenas de texto\n");
 		return false;
 	}
 
-	*a = atoi(argv[last_index]);
-	*b = atoi(argv[last_index + 1]);
+	*a = atoi(str_a);
+	*b = atoi(str_b);
 
 	if (!is_in_range(*a, MIN_VALUE_INPUT, MAX_VALUE_INPUT) || 
 		!is_in_range(*b, MIN_VALUE_INPUT, MAX_VALUE_INPUT)) {
@@ -144,8 +133,7 @@ int main(int argc, char *argv[]) {
 	};
 	int functions_to_run = 0;
 	
-	int last_index = parse_argv(argc, argv, output_file, functions, 
-								&functions_to_run);
+	int last_index = parse_argv(argc, argv, output_file, functions, &functions_to_run);
 
 	if (!output_file) {
 		fprintf(stderr, "Error: No se pudo acceder al archivo de salida.\n");
@@ -154,15 +142,18 @@ int main(int argc, char *argv[]) {
 	
 	unsigned int a;
 	unsigned int b;
-	if (!extract_numbers_parameters(argv, last_index, &a, &b)) 
+	if (!extract_numbers_parameters(argv[last_index], argv[last_index + 1], 
+																	&a, &b)) {		
+		if (output_file != stdout)
+			fclose(output_file);
 		exit(EXIT_FAILURE);
+	}
 	
 	if (functions_to_run == 0)
 		functions_to_run = MAX_FUNCTIONS_TO_RUN;
 
 	for (int i = 0; i < functions_to_run; i++)
 		fprintf(output_file, "%u\n", functions[i](a, b));
-
 
 	if (output_file != stdout)
 		fclose(output_file);
