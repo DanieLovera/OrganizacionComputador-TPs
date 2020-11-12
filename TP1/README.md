@@ -1,10 +1,14 @@
-# Compilacion con make
-El archivo esta hecho unicamente para compilar utilizando los archivos fuentes .S, no esta preparado para  
-compilar usando otros fuentes (Ejemplo, el .c o .h utilizado para dar soporte)
+# Comandos del archivo make
 
 ### Comando para compilar en el qemu 
 make
 
+### Comando para compilar en maquina host con archivos de soporte
+make host
+
 ### Comando para eliminar los programas generados por el make
 make clean
+
+### Comando para correr pruebas automáticas en python
+make testing
 
