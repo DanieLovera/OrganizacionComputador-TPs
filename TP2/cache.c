@@ -16,16 +16,20 @@ unsigned int _cache_block_memory_address(unsigned int tag
 unsigned int _cache_look_up(int tag, int set);
 
 void cache_init(unsigned int capacity, unsigned int ways_number, unsigned int block_size) {
-	unsigned int total_sets = _cache_total_sets();
-	cache.sets = (set_t*)malloc(sizeof(set_t) * total_sets);
-	for (int set = 0; set < total_sets; set++) {
-		_set_init(&(cache.sets[set]), ways_number, block_size);
-	}
 	cache.capacity = capacity;
 	cache.ways_number = ways_number;
 	cache.block_size = block_size;
 	cache.hits = 0;
 	cache.misses = 0;
+	unsigned int total_sets = _cache_total_sets();
+	cache.sets = (set_t*)malloc(sizeof(set_t) * total_sets);
+	for (int set = 0; set < total_sets; set++) {
+		_set_init(&(cache.sets[set]), ways_number, block_size);
+	}
+}
+
+void init() {
+	memory_init(&memory);
 }
 
 void cache_uninit() {
@@ -34,10 +38,7 @@ void cache_uninit() {
 		_set_uninit(&(cache.sets[set]));
 	}
 	free(cache.sets);
-}
-
-void init() {
-	memory_init(&memory);
+	memory_uninit(&memory);
 }
 
 unsigned int find_set(int address) {
