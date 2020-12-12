@@ -1,6 +1,7 @@
 #ifndef _CACHE_H_
 #define _CACHE_H_
 #include <stdbool.h>
+#include "memory.h"
 
 typedef struct set set_t;
 typedef struct block block_t;
@@ -20,11 +21,14 @@ struct set {
 
 struct block {
 	char *data;
-	unsigned int lru_counter;
+	int lru_counter;
 	unsigned int tag;
 	bool dirty;
 	bool valid;
 };
+
+memory_t memory;
+cache_t cache;
 
 void cache_init(unsigned int capacity, unsigned int ways_number, unsigned int block_size);
 void cache_uninit();
