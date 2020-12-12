@@ -1,7 +1,7 @@
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
-#define CAPACITY 64 //En bytes
+#define CAPACITY 64 * 1024 //En bytes
 
 typedef struct memory {
 	char data[CAPACITY];

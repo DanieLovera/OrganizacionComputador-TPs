@@ -103,7 +103,7 @@ void read_block(int blocknum) { //block num es un numero de bloque de memoria y 
 	}
 	cache.sets[set].blocks[way].valid = true;
 	cache.sets[set].blocks[way].dirty = false;
-	cache.sets[set].blocks[way].lru_counter = -1; 
+	cache.sets[set].blocks[way].lru_counter = -1;
 	cache.sets[set].blocks[way].tag = tag;
 	char *data_buffer = cache.sets[set].blocks[way].data;
 	memory_read(&memory, data_buffer, address, cache.block_size);
