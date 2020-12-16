@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// memory_t memory;
-// cache_t cache;
+memory_t memory;
+cache_t cache;
 
 void _set_init(set_t *self, unsigned int ways_number, unsigned int block_data_size);
 void _set_uninit(set_t *self);

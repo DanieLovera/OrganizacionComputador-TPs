@@ -27,9 +27,6 @@ struct block {
 	bool valid;
 };
 
-memory_t memory;
-cache_t cache;
-
 void cache_init(unsigned int capacity, unsigned int ways_number, unsigned int block_size);
 void cache_uninit();
 void init();
