@@ -19,12 +19,12 @@ static int vector_look_up(char *vector[], char *search_value, int vector_len);
 static void show_usage();
 static void show_version();
 static bool is_arg_equal_short_long(char *arg, char *short_form, 
-                                    char *long_form);
+									char *long_form);
 static char* safe_get(char *vector[], int index, int vector_len, 
-                      char *long_form);
+					  char *long_form);
 static bool is_a_number(char* num);
 static int safe_get_int(char *vector[], int index, int vector_len, 
-                        int long_form);
+						int long_form);
 
 // ---------------- CommandParser ----------------
 
@@ -56,7 +56,7 @@ bool command_parse_line(command_t *self, char *line) {
 
 static bool init_wrapper(char *args[]) {
 	init();
-    fprintf(stdout, "Se inicia la caché\n");
+	fprintf(stdout, "Se inicia la caché\n");
 	return true;
 }
 
@@ -65,7 +65,7 @@ static bool write_wrapper(char *args[]) {
 	int mem_direction = atoi(args[1]);
 	char data = (char)atoi(args[2]);
 	write_byte(mem_direction, data);
-    fprintf(stdout, "Escribe %c en la dirección %d\n", data, mem_direction);
+	fprintf(stdout, "Escribe %c en la dirección %d\n", data, mem_direction);
 	return true;
 }
 
@@ -73,8 +73,8 @@ static bool read_wrapper(char *args[]) {
 	if (!args[1]) return false;
 	int mem_direction = atoi(args[1]);
 	char resultado = read_byte(mem_direction);
-    fprintf(stdout, "Leo de la dirección %d y obtengo %c\n", mem_direction, 
-            resultado);
+	fprintf(stdout, "Leo de la dirección %d y obtengo %c\n", mem_direction, 
+			resultado);
 	return true;
 }
 
@@ -144,17 +144,17 @@ bool argparser_is_command_valid(argparser_t *self) {
 
 static void show_usage() {
 	fprintf(stdout, 
-		    "Usage:\n"
-		    "	tp2 -h\n"
-		    "	tp2 -V\n"
-		    "	tp2 options archivo\n"
-		    "Options:\n"
-		    "	-h, --help 			Imprime ayuda.\n"
-		    "	-V, --version 		Versión del programa.\n"
-		    "	-o, --output 		Archivo de salida.\n"
-		    "	-w, --ways			Cantidad de vías.\n"
-		    "	-cs --cachesize 	Tamaño del caché en kilobytes.\n"
-		    "	-bs, --blocksize	Tamaño del bloque en bytes.\n");
+			"Usage:\n"
+			"	tp2 -h\n"
+			"	tp2 -V\n"
+			"	tp2 options archivo\n"
+			"Options:\n"
+			"	-h, --help 			Imprime ayuda.\n"
+			"	-V, --version 		Versión del programa.\n"
+			"	-o, --output 		Archivo de salida.\n"
+			"	-w, --ways			Cantidad de vías.\n"
+			"	-cs --cachesize 	Tamaño del caché en kilobytes.\n"
+			"	-bs, --blocksize	Tamaño del bloque en bytes.\n");
 }
 
 static void show_version() {
@@ -163,12 +163,12 @@ static void show_version() {
 
 
 static bool is_arg_equal_short_long(char *arg, char *short_form, 
-                                    char *long_form) {
+									char *long_form) {
 	return strcmp(arg, short_form) == 0 || strcmp(arg, long_form) == 0;
 }
 
 static char* safe_get(char *vector[], int index, int vector_len, 
-                      char *default_value) {
+					  char *default_value) {
 	if (index < 0 || index >= vector_len) 
 		return default_value;
 	return vector[index];
@@ -187,7 +187,7 @@ static bool is_a_number(char* num) {
 }
 
 static int safe_get_int(char *vector[], int index, int vector_len, 
-                        int default_value) {
+						int default_value) {
 	if (index < 0 || index >= vector_len || !is_a_number(vector[index]))
 		return default_value;
 	return atoi(vector[index]);
