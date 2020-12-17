@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
 	// unsigned int n_ways = 4;
 	// unsigned int block_size = 32;
 
-	int capacity = argparser.capacity;
+	int capacity = argparser.capacity * 1024;
 	int n_ways = argparser.n_ways;
 	int block_size = argparser.block_size;
 
