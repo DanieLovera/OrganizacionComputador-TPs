@@ -43,11 +43,6 @@ void cache_uninit() {
 }
 
 unsigned int find_set(int address) {
-	// unsigned int memory_block = address / (cache.block_size);
-	// unsigned int cache_block = 
-	// 	memory_block % (cache.capacity / cache.block_size);
-	// return (cache_block / cache.ways_number);
-
 	return address_parser_set(address, cache.block_size, _cache_total_sets());
 }
 
@@ -74,8 +69,8 @@ unsigned int is_dirty(int way, int setnum) {
 	return block.dirty;
 }
 
-void read_block(int blocknum) { //block num es un numero de bloque de memoria y escribo en cache
-	unsigned int address = blocknum * cache.block_size;
+void read_block(int blocknum) { 
+	int address = blocknum * cache.block_size;
 	unsigned int tag = address_parser_tag(address
 		, cache.block_size, _cache_total_sets());
 	unsigned int set = address_parser_set(address
@@ -116,7 +111,7 @@ char read_byte(int address) {
 		// printf("Hit en lectura, add: %d \n", address);
 	} else {
 		// printf("Miss en lectura, add: %d \n", address);
-		read_block(address/cache.block_size); // lee en memoria el bloque pasado por param y guarda en cache
+		read_block(address/cache.block_size); 
 		value = read_byte(address);
 		cache.hits--;
 	}

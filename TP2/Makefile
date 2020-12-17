@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -std=c99 -Wall -Wno-sign-conversion -Werror 
+CFLAGS = -g -std=c99 -Wall -Wno-sign-conversion -Werror -Wpedantic
 VFLAGS = --leak-check=full --track-origins=yes --show-reachable=yes
 
 EXEC_S = main
