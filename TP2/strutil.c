@@ -1,7 +1,6 @@
 /*
 Alumno: Torresetti Lisandro
 Padron: 99846
-Corrector: Cano Matias
 */
 #define _POSIX_C_SOURCE 200809L  //Para que ande strdup
 #include <stdio.h>

@@ -154,7 +154,9 @@ static void show_usage() {
 			"	-o, --output 		Archivo de salida.\n"
 			"	-w, --ways			Cantidad de vías.\n"
 			"	-cs --cachesize 	Tamaño del caché en kilobytes.\n"
-			"	-bs, --blocksize	Tamaño del bloque en bytes.\n");
+			"	-bs, --blocksize	Tamaño del bloque en bytes.\n"
+			"Examples:\n"
+			"	tp2 -w 4 -cs 8 -bs 16 prueba1.mem\n");
 }
 
 static void show_version() {

@@ -1,6 +1,9 @@
 ## Implementacion de una memoria cache WB/WA con politica de reemplazo LRU
 
 
+[Informe](https://www.overleaf.com/4586521534gvybxskhsrxh
+)
+
 ### Casos de pruebas
 - Caché 1:
     - 4KB tamaño de caché.
