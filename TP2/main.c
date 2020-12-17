@@ -147,7 +147,6 @@ int main(int argc, char *argv[]) {
 	int n_ways = argparser.n_ways;
 	int block_size = argparser.block_size;
 
-	printf("%d %d %d \n", capacity, n_ways, block_size);
 	cache_init(capacity, n_ways, block_size);	
 	command_t command;
 	command_init(&command);

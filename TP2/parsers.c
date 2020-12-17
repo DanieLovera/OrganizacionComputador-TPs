@@ -10,35 +10,23 @@
 
 #define COMMAND_DELIMITER ' '
 
-static bool init_wrapper(char *args[]) {
-	init();
-	return true;
-}
+static bool init_wrapper(char *args[]);
+static bool write_wrapper(char *args[]);
+static bool read_wrapper(char *args[]);
+static bool get_miss_rate_wrapper(char *args[]);
+static bool command_not_found(char *args[]);
+static int vector_look_up(char *vector[], char *search_value, int vector_len);
+static void show_usage();
+static void show_version();
+static bool is_arg_equal_short_long(char *arg, char *short_form, 
+                                    char *long_form);
+static char* safe_get(char *vector[], int index, int vector_len, 
+                      char *long_form);
+static bool is_a_number(char* num);
+static int safe_get_int(char *vector[], int index, int vector_len, 
+                        int long_form);
 
-static bool write_wrapper(char *args[]) {
-	if (!args[1] || !args[2]) return false;
-	int mem_direction = atoi(args[1]);
-	char data = (char)atoi(args[2]);
-	write_byte(mem_direction, data);
-	return true;
-}
-
-static bool read_wrapper(char *args[]) {
-	if (!args[1]) return false;
-	int mem_direction = atoi(args[1]);
-	read_byte(mem_direction);
-	return true;
-}
-
-static bool get_miss_rate_wrapper(char *args[]) {
-	fprintf(stdout, "MR: %%%d\n" , get_miss_rate());
-	return true;
-}
-
-static bool command_not_found(char *args[]) {
-	fprintf(stderr, "Archivo con formato inválido.\n");
-	return false;
-}
+// ---------------- CommandParser ----------------
 
 void command_init(command_t *self) {
 	self->command_names[0] = "init";
@@ -50,16 +38,6 @@ void command_init(command_t *self) {
 	self->commands[1] = read_wrapper;
 	self->commands[2] = write_wrapper;
 	self->commands[3] = get_miss_rate_wrapper;
-}
-
-static int vector_look_up(char *vector[], char *search_value, int vector_len) {
-	for (int i = 0; i < vector_len; i++) {
-		if (strncmp(search_value, vector[i], 
-					strlen(vector[i])) == 0) {
-			return i;
-		}
-	}
-	return -1;
 }
 
 bool command_parse_line(command_t *self, char *line) {
@@ -76,61 +54,58 @@ bool command_parse_line(command_t *self, char *line) {
 	return result;
 }
 
-static void show_usage() {
-	fprintf(stdout, 
-		    "Usage:\n"
-		    "	tp2 -h\n"
-		    "	tp2 -V\n"
-		    "	tp2 options archivo\n"
-		    "Options:\n"
-		    "	-h, --help 			Imprime ayuda.\n"
-		    "	-V, --version 		Versión del programa.\n"
-		    "	-o, --output 		Archivo de salida.\n"
-		    "	-w, --ways			Cantidad de vías.\n"
-		    "	-cs --cachesize 	Tamaño del caché en kilobytes.\n"
-		    "	-bs, --blocksize	Tamaño del bloque en bytes.\n");
+static bool init_wrapper(char *args[]) {
+	init();
+    fprintf(stdout, "Se inicia la caché\n");
+	return true;
 }
 
-static void show_version() {
-	fprintf(stdout, "Version 1.0\n");
+static bool write_wrapper(char *args[]) {
+	if (!args[1] || !args[2]) return false;
+	int mem_direction = atoi(args[1]);
+	char data = (char)atoi(args[2]);
+	write_byte(mem_direction, data);
+    fprintf(stdout, "Escribe %c en la dirección %d\n", data, mem_direction);
+	return true;
 }
+
+static bool read_wrapper(char *args[]) {
+	if (!args[1]) return false;
+	int mem_direction = atoi(args[1]);
+	char resultado = read_byte(mem_direction);
+    fprintf(stdout, "Leo de la dirección %d y obtengo %c\n", mem_direction, 
+            resultado);
+	return true;
+}
+
+static bool get_miss_rate_wrapper(char *args[]) {
+	fprintf(stdout, "MR: %%%d\n" , get_miss_rate());
+	return true;
+}
+
+static bool command_not_found(char *args[]) {
+	fprintf(stderr, "Archivo con formato inválido.\n");
+	return false;
+}
+
+
+static int vector_look_up(char *vector[], char *search_value, int vector_len) {
+	for (int i = 0; i < vector_len; i++) {
+		if (strncmp(search_value, vector[i], 
+					strlen(vector[i])) == 0) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+// ---------------- ArgParser ----------------
 
 void argparser_init(argparser_t *self) {
 	self->capacity = -1;
 	self->n_ways = -1;
 	self->block_size = -1;
 	self->output = NULL;
-}
-
-static bool is_arg_equal_short_long(char *arg, char *short_form, 
-                                    char *long_form) {
-	return strcmp(arg, short_form) == 0 || strcmp(arg, long_form) == 0;
-}
-
-static char* safe_get(char *vector[], int index, int vector_len, 
-                      char *default_value) {
-	if (index < 0 || index >= vector_len) 
-		return default_value;
-	return vector[index];
-}
-
-static bool is_a_number(char* num) {
-	if (num[0] != '-' && !isdigit(num[0])) 
-		return false;
-
-	size_t len_number = strlen(num);
-	for (size_t i = 1; i < len_number; i++){
-		if (!isdigit(num[i])) 
-			return false;
-	}
-	return true;
-}
-
-static int safe_get_int(char *vector[], int index, int vector_len, 
-                        int default_value) {
-	if (index < 0 || index >= vector_len || !is_a_number(vector[index]))
-		return default_value;
-	return atoi(vector[index]);
 }
 
 void argparser_parse(argparser_t *self, int argc, char *argv[]) {
@@ -165,4 +140,55 @@ void argparser_parse(argparser_t *self, int argc, char *argv[]) {
 bool argparser_is_command_valid(argparser_t *self) {
 	return (self->output != NULL) && (self->n_ways > 0) && 
 		   (self->capacity > 0) && (self->block_size > 0);
+}
+
+static void show_usage() {
+	fprintf(stdout, 
+		    "Usage:\n"
+		    "	tp2 -h\n"
+		    "	tp2 -V\n"
+		    "	tp2 options archivo\n"
+		    "Options:\n"
+		    "	-h, --help 			Imprime ayuda.\n"
+		    "	-V, --version 		Versión del programa.\n"
+		    "	-o, --output 		Archivo de salida.\n"
+		    "	-w, --ways			Cantidad de vías.\n"
+		    "	-cs --cachesize 	Tamaño del caché en kilobytes.\n"
+		    "	-bs, --blocksize	Tamaño del bloque en bytes.\n");
+}
+
+static void show_version() {
+	fprintf(stdout, "Version 1.0\n");
+}
+
+
+static bool is_arg_equal_short_long(char *arg, char *short_form, 
+                                    char *long_form) {
+	return strcmp(arg, short_form) == 0 || strcmp(arg, long_form) == 0;
+}
+
+static char* safe_get(char *vector[], int index, int vector_len, 
+                      char *default_value) {
+	if (index < 0 || index >= vector_len) 
+		return default_value;
+	return vector[index];
+}
+
+static bool is_a_number(char* num) {
+	if (num[0] != '-' && !isdigit(num[0])) 
+		return false;
+
+	size_t len_number = strlen(num);
+	for (size_t i = 1; i < len_number; i++){
+		if (!isdigit(num[i])) 
+			return false;
+	}
+	return true;
+}
+
+static int safe_get_int(char *vector[], int index, int vector_len, 
+                        int default_value) {
+	if (index < 0 || index >= vector_len || !is_a_number(vector[index]))
+		return default_value;
+	return atoi(vector[index]);
 }

@@ -57,30 +57,14 @@ unsigned int find_lru(int setnum) {
 	int min_lru_counter = set.blocks[lru_way].lru_counter;
 
 	for (int way = 0; way < cache.ways_number; way++) {
-		printf("%d\n", set.blocks[way].lru_counter);
+		// printf("%d\n", set.blocks[way].lru_counter);
 		if (set.blocks[way].lru_counter < min_lru_counter) {
 			lru_way = way;
 			min_lru_counter = set.blocks[lru_way].lru_counter;	
 		}
 	}
-	
 
-	// for (int way = 0; way < cache.ways_number; way++) {
-	// 	if (set.blocks[way].lru_counter < set.blocks[lru_way].lru_counter) {
-	// 		lru_way = way;
-	// 		min_lru_counter = set.blocks[way].lru_counter;
-	// 	}
-	// }
-
-
-	// for(int way = 0; way < (cache.ways_number - 1); way++) {
-	// 	if (set.blocks[way].lru_counter < set.blocks[way + 1].lru_counter) {
-	// 		lru_way = way;
-	// 	}
-	// }
-
-
-	printf("via lru %d\n", lru_way);
+	// printf("via lru %d\n", lru_way);
 	return lru_way;
 }
 
@@ -129,9 +113,9 @@ char read_byte(int address) {
 	if (way >= 0) {
 		value = cache.sets[set].blocks[way].data[offset];
 		cache.sets[set].blocks[way].lru_counter++;
-		printf("Hit en lectura, add: %d \n", address);
+		// printf("Hit en lectura, add: %d \n", address);
 	} else {
-		printf("Miss en lectura, add: %d \n", address);
+		// printf("Miss en lectura, add: %d \n", address);
 		read_block(address/cache.block_size); // lee en memoria el bloque pasado por param y guarda en cache
 		value = read_byte(address);
 		cache.hits--;
@@ -155,10 +139,10 @@ void write_byte(int address, char value) {
 		cache.sets[set].blocks[way].data[offset] = value;
 		cache.sets[set].blocks[way].dirty = true;
 		cache.sets[set].blocks[way].lru_counter++;
-		printf("Hit en escritura, add: %d, val: %c \n", address, value);
+		// printf("Hit en escritura, add: %d, val: %c \n", address, value);
 	} else { //  MISS EN ESCRITURA IMPLICA CARGAR EL DATO DE MEMORIA A CACHE Y ESCRIBIR EL DATO
 		read_block(address/cache.block_size);
-		printf("Miss en escritura, add: %d, val: %c \n", address, value);
+		// printf("Miss en escritura, add: %d, val: %c \n", address, value);
 		write_byte(address, value);
 		cache.hits--;
 	}
