@@ -25,6 +25,7 @@ struct block {
 	unsigned int tag;
 	bool dirty;
 	bool valid;
+	bool last_used;
 };
 
 void cache_init(unsigned int capacity, unsigned int ways_number, unsigned int block_size);

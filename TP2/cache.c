@@ -29,6 +29,13 @@ void cache_init(unsigned int capacity, unsigned int ways_number, unsigned int bl
 	}
 }
 
+void update_last_used(int set, int way){
+	for (int _way = 0; _way < cache.ways_number; _way++){
+		cache.sets[set].blocks[_way].last_used = false;
+	}
+	cache.sets[set].blocks[way].last_used = true;
+}
+
 void init() {
 	memory_init(&memory);
 }
@@ -107,7 +114,10 @@ char read_byte(int address) {
 	char value = 0;
 	if (way >= 0) {
 		value = cache.sets[set].blocks[way].data[offset];
-		cache.sets[set].blocks[way].lru_counter++;
+		if (!cache.sets[set].blocks[way].last_used){
+			cache.sets[set].blocks[way].lru_counter++;
+		}
+		update_last_used(set, way);
 		// printf("Hit en lectura, add: %d \n", address);
 	} else {
 		// printf("Miss en lectura, add: %d \n", address);
@@ -133,7 +143,10 @@ void write_byte(int address, char value) {
 	if (way >= 0) { // HIT EN ESCRITURA ESCRIBO EN CACHE UNICAMENTE
 		cache.sets[set].blocks[way].data[offset] = value;
 		cache.sets[set].blocks[way].dirty = true;
-		cache.sets[set].blocks[way].lru_counter++;
+		if (!cache.sets[set].blocks[way].last_used){
+			cache.sets[set].blocks[way].lru_counter++;
+		}
+		update_last_used(set, way);
 		// printf("Hit en escritura, add: %d, val: %c \n", address, value);
 	} else { //  MISS EN ESCRITURA IMPLICA CARGAR EL DATO DE MEMORIA A CACHE Y ESCRIBIR EL DATO
 		read_block(address/cache.block_size);
@@ -194,6 +207,7 @@ void _block_init(block_t *self, unsigned int data_size) {
 	self->dirty = false;
 	self->valid = false;
 	self->lru_counter = -1;
+	self->last_used = false;
 }
 
 void _block_uninit(block_t *self) {
