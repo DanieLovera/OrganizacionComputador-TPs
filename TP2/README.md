@@ -4,7 +4,7 @@
 [Informe](https://www.overleaf.com/4586521534gvybxskhsrxh
 )
 
-### Casos de pruebas
+### Casos de pruebas de la cátedra
 - Caché 1:
     - 4KB tamaño de caché.
     - 4 vías.
@@ -29,7 +29,7 @@ MR
 ```
 
 - En la caché 1:
-    - Comando: ``` ./main -cs 4 -w 4 -bs 32 prueba1.mem ```
+    - Comando: ``` ./main -cs 4 -w 4 -bs 32 ./pruebas/prueba1.mem ```
     - Salida:
     ```
     Se inicia la caché
@@ -44,7 +44,7 @@ MR
     MR: %50
     ```
 - En la caché 2:
-    - Comando: ``` ./main -cs 16 -w 1 -bs 128 prueba1.mem ```
+    - Comando: ``` ./main -cs 16 -w 1 -bs 128 ./pruebas/prueba1.mem ```
     - Salida:
     ```
     Se inicia la caché
@@ -76,7 +76,7 @@ MR
 ```
 
 - En la caché 1:
-    - Comando: ``` ./main -cs 4 -w 4 -bs 32 prueba2.mem ```
+    - Comando: ``` ./main -cs 4 -w 4 -bs 32 ./pruebas/prueba2.mem ```
     - Salida:
     ```
     Se inicia la caché
@@ -93,7 +93,7 @@ MR
     MR: %70
     ```
 - En la caché 2:
-    - Comando: ``` ./main -cs 16 -w 1 -bs 128 prueba2.mem ```
+    - Comando: ``` ./main -cs 16 -w 1 -bs 128 ./pruebas/prueba2.mem ```
     - Salida:
     ```
     Se inicia la caché
