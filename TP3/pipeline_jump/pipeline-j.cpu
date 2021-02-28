@@ -31,7 +31,7 @@
 		"NotStall":   {"type": "Not", "x": 175, "y": 2, "in": "Stall", "out": "Write"},
 		"ForkWrite":  {"type": "Fork", "x": 190, "y": 50, "size": 1, "in": "In", "out": ["Out1", "Out2"]},
 		
-		"ID/EX":      {"type": "PipelineRegister", "x": 390, "y": 110, "regs": {"Jump": 1,"ReadData1": 32, "ReadData2": 32, "NewPC": 32, "Imm": 32, "Rs": 5, "Rt": 5, "Rd": 5, "RegDst": 1, "ALUOp": 2, "ALUSrc": 1, "Branch": 1, "MemRead": 1, "MemWrite": 1, "MemToReg": 1, "RegWrite": 1}, "desc": {"default": "Register that separates two pipeline stages.\nThe values that transition to the next stage are stored here temporarily.\nIf Flush is active, all values are set to zero, inserting a NOP instruction.", "pt": "Registo que separa duas etapas do pipeline.\nOs valores que transitam para a próxima etapa são armazenados aqui temporariamente.\nSe Flush estiver activo, todos os valores são colocados a zero, inserindo uma instrução NOP."}},
+		"ID/EX":      {"type": "PipelineRegister", "x": 390, "y": 110, "regs": {"JumpAddress": 26, "Jump": 1,"ReadData1": 32, "ReadData2": 32, "NewPC": 32, "Imm": 32, "Rs": 5, "Rt": 5, "Rd": 5, "RegDst": 1, "ALUOp": 2, "ALUSrc": 1, "Branch": 1, "MemRead": 1, "MemWrite": 1, "MemToReg": 1, "RegWrite": 1}, "desc": {"default": "Register that separates two pipeline stages.\nThe values that transition to the next stage are stored here temporarily.\nIf Flush is active, all values are set to zero, inserting a NOP instruction.", "pt": "Registo que separa duas etapas do pipeline.\nOs valores que transitam para a próxima etapa são armazenados aqui temporariamente.\nSe Flush estiver activo, todos os valores são colocados a zero, inserindo uma instrução NOP."}},
 		
 		"ForkReg":    {"type": "Fork", "x": 445, "y": 281, "size": 32, "in": "In", "out": ["Out1", "Out2"]},
 		"MuxFwdA":    {"type": "Multiplexer", "latency": 15, "x": 425, "y": 230, "size": 32, "sel": "ForwardA", "out": "Out", "in": ["0", "1", "2"], "desc": {"default": "Selects, in conjunction with the forwarding unit, if the value of the 1st register comes from the register bank or if it's forwarded from one of the next stages.", "pt": "Selecciona, em conjunto com a unidade de atalhos, se o valor do 1º registo vem do banco de registos ou se é encaminhado de uma das etapas seguintes."}},
@@ -49,7 +49,7 @@
 		"ForkRt2":    {"type": "Fork", "x": 408, "y": 381, "size": 5, "in": "In", "out": ["Out1", "Out2", "Out3"]},
 		"ForwardingUnit":{"type": "ForwardingUnit", "latency": 50, "x": 470, "y": 410, "ex_mem_reg_write": "EX/MEM.RegWrite", "mem_wb_reg_write": "MEM/WB.RegWrite", "ex_mem_rd": "EX/MEM.Rd", "mem_wb_rd": "MEM/WB.Rd", "id_ex_rs": "ID/EX.Rs", "id_ex_rt": "ID/EX.Rt", "fwd_a": "ForwardA", "fwd_b": "ForwardB"},
 		
-		"EX/MEM":     {"type": "PipelineRegister", "x": 550, "y": 110, "regs": {"Jump": 1,"Result": 32, "ReadData2": 32, "Zero": 1, "RegBankDst": 5, "Target": 32, "Branch": 1, "MemRead": 1, "MemWrite": 1, "MemToReg": 1, "RegWrite": 1}, "desc": {"default": "Register that separates two pipeline stages.\nThe values that transition to the next stage are stored here temporarily.\nIf Flush is active, all values are set to zero, inserting a NOP instruction.", "pt": "Registo que separa duas etapas do pipeline.\nOs valores que transitam para a próxima etapa são armazenados aqui temporariamente.\nSe Flush estiver activo, todos os valores são colocados a zero, inserindo uma instrução NOP."}},
+		"EX/MEM":     {"type": "PipelineRegister", "x": 550, "y": 110, "regs": {"JumpAddress": 26, "Jump": 1,"Result": 32, "ReadData2": 32, "Zero": 1, "RegBankDst": 5, "Target": 32, "Branch": 1, "MemRead": 1, "MemWrite": 1, "MemToReg": 1, "RegWrite": 1}, "desc": {"default": "Register that separates two pipeline stages.\nThe values that transition to the next stage are stored here temporarily.\nIf Flush is active, all values are set to zero, inserting a NOP instruction.", "pt": "Registo que separa duas etapas do pipeline.\nOs valores que transitam para a próxima etapa são armazenados aqui temporariamente.\nSe Flush estiver activo, todos os valores são colocados a zero, inserindo uma instrução NOP."}},
 		
 		"ForkMem":    {"type": "Fork", "x": 575, "y": 275, "size": 32, "in": "In", "out": ["Out1", "Out2"]},
 		"ForkEXR1":   {"type": "Fork", "x": 575, "y": 360, "size": 32, "in": "In", "out": ["Out1", "Out2"]},
@@ -73,11 +73,14 @@
 	"wires": [
 		{"from": "Control", "out": "Jump", "to": "ID/EX", "in": "Jump", "start": {"x": 290, "y": 120}, "end": {"x": 390, "y": 120}},
 		{"from": "ID/EX", "out": "Jump", "to": "EX/MEM", "in": "Jump", "start": {"x": 405, "y": 120}, "end": {"x": 550, "y": 120}},
+		{"from": "DistInst", "out": "25-0", "to": "ID/EX", "in": "JumpAddress", "start": {"x": 202, "y": 250}, "points": [{"x": 202, "y": 405}], "end": {"x": 390, "y": 405}},
+		{"from": "ID/EX", "out": "JumpAddress", "to": "EX/MEM", "in": "JumpAddress", "start": {"x": 405, "y": 405}, "end": {"x": 550, "y": 405}},
+		{"from": "EX/MEM", "out": "JumpAddress", "to": "ShiftJump", "in": "In", "start": {"x": 552, "y": 110}, "points":[{"x": 552, "y": 475}], "end": {"x": 160, "y": 475}},
+
 		{"from": "EX/MEM", "out": "Jump", "to": "ForkJump", "in": "Jump", "start": {"x": 557, "y": 110}, "points":[{"x": 557, "y": 490}]},
 		{"from": "ForkJump", "out": "Out1", "to": "MuxJump", "in": "Jump", "points": [{"x": 22, "y": 490}], "end": {"x": 22, "y": 440}},
 		{"from": "ForkJump", "out": "Out2", "to": "OrJumpFlush", "in": "Jump", "points": [{"x": 750, "y": 490}, {"x": 750, "y": 62}], "end": {"x": 652, "y": 62}},
 		{"from": "MuxPC", "out": "Out", "to": "MuxJump", "in": "0", "start": {"x": 22, "y": 280}, "end": {"x": 22, "y": 405}},
-		{"from": "DistInst", "out": "25-0", "to": "ShiftJump", "in": "In", "start": {"x": 202, "y": 250}, "points": [{"x": 202, "y": 460}], "end": {"x":160, "y":460}},
 		{"from": "ForkPCAdder", "out": "Out1", "to": "DistPC", "in": "In", "points": [{"x": 155, "y": 115}]},
 		{"from": "ShiftJump", "out": "Out", "to": "ConcatJump", "in": "In2"},
 		{"from": "DistPC", "out": "31-28", "to": "ConcatJump", "in": "In1", "start": {"x": 145, "y": 125}, "points": [{"x": 35, "y": 125}, {"x": 35, "y": 460}]},
