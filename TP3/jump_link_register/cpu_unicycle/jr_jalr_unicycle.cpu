@@ -5,7 +5,6 @@
 		"ForkPC":     {"type": "Fork", "x": 80, "y": 265, "size": 32, "in": "In", "out": ["Out1", "Out2"]},
 		"ForkPCAdder":     {"type": "Fork", "x": 175, "y": 75, "size": 32, "in": "In", "out": ["Out1", "Out2"]},
 
-
 		"PC":         {"type": "PC", "x": 40, "y": 250, "in": "NewPC", "out": "PC"},
 		"PCAdder":    {"type": "Add", "latency": 50, "x": 110, "y": 58, "in1": "In1", "in2": "In2", "out": "PC+4", "desc": {"default": "Calculates the address of the next sequential instruction.", "pt": "Calcula o endereço da instrução sequencial seguinte."}},
 		"Const4":     {"type": "Constant", "x": 85, "y": 73, "out": "Out", "val": 4, "size": 32},
@@ -41,18 +40,12 @@
 		{"from": "PCAdder", "out": "PC+4", "to": "ForkPCAdder", "in": "In"},
 		{"from": "ForkPCAdder", "out": "Out1", "to": "DistPC", "in": "In"},
 		{"from": "ForkPCAdder", "out": "Out2", "to": "MuxMem", "in": "2", "points": [{"x": 175, "y": 390}, {"x": 587, "y": 390}], "end": {"x": 587, "y": 304}},
-
-
 		{"from": "ForkReg1", "out": "Out2", "to": "MuxJumpReg", "in": "1", "points": [{"x": 370, "y": 210}, {"x": 550, "y": 210}, {"x": 550, "y": 115}], "end": {"x": 555, "y": 115}},
-
-
-
 		{"from": "MuxBranch", "out": "Out", "to": "MuxJumpReg", "in": "0", "points": [{"x": 550, "y": 67}, {"x": 550, "y": 100}], "end": {"x": 555, "y": 100}},
 		{"from": "Control", "out": "JumpReg", "to": "MuxJumpReg", "in": "JumpReg", "start": {"x": 280, "y": 135}, "points": [{"x": 563, "y": 135}], "end": {"x": 563, "y": 124}},
 		{"from": "MuxJumpReg", "out": "Out", "to": "MuxJump", "in": "0", "points": [{"x": 575, "y": 107}, {"x": 575, "y": 29}]},
 		{"from": "DataMem", "out": "ReadData", "to": "MuxMem", "in": "1", "end": {"x": 580, "y": 292}},
 		{"from": "ForkMem", "out": "Out2", "to": "MuxMem", "in": "0", "points": [{"x": 470, "y": 352}, {"x": 570, "y": 352}, {"x": 570, "y": 281}], "end": {"x": 580, "y": 281}},
-
 
 		{"from": "PC", "out": "PC", "to": "ForkPC", "in": "In"},
 		{"from": "Const4", "out": "Out", "to": "PCAdder", "in": "In2"},
@@ -91,7 +84,6 @@
 		{"from": "ForkBranch", "out": "Out1", "to": "AddBranch", "in": "In1"},
 		{"from": "AddBranch", "out": "Out", "to": "MuxBranch", "in": "1", "end": {"x": 530, "y": 77}},
 		{"from": "ForkBranch", "out": "Out2", "to": "MuxBranch", "in": "0", "points": [{"x": 320, "y": 55}], "end": {"x": 530, "y": 55}},
-
 		{"from": "Control", "out": "Branch", "to": "AndBranch", "in": "Branch", "start": {"x": 280, "y": 130}, "points": [{"x": 420, "y": 130}, {"x": 420, "y": 110}]},
 		{"from": "ALU", "out": "Zero", "to": "AndBranch", "in": "Zero", "start": {"x": 460, "y": 255}, "points": [{"x": 470, "y": 255}, {"x": 470, "y": 120}]},
 		{"from": "AndBranch", "out": "Branch", "to": "MuxBranch", "in": "Branch", "end": {"x": 537, "y": 85}, "points": [{"x": 537, "y": 115}]},
