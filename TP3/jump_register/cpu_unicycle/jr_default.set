@@ -35,6 +35,7 @@
 	},
 	"control": {
 		"1": {"RegDst": 1, "RegWrite": 0, "ALUop": 2, "AluSrc": 0, "MemToReg":0, "JumpReg": 1},
+		
 		"0": {"RegDst": 1, "RegWrite": 1, "ALUOp": 2, "ALUSrc": 0, "MemToReg": 0},
 		"8": {"RegDst": 0, "RegWrite": 1, "ALUOp": 0, "ALUSrc": 1, "MemToReg": 0},
 		"2": {"Jump": 1},
@@ -48,6 +49,7 @@
 		"control_size": 4,
 		"control": [
 			{"aluop": 2, "func": 8, "out": {"Operation": 2}},
+			
 			{"aluop": 0, "out": {"Operation": 2}},
 			{"aluop": 1, "out": {"Operation": 6}},
 			{"aluop": 2, "func": 32, "out": {"Operation": 2}},
