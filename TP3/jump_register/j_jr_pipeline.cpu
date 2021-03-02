@@ -11,7 +11,6 @@
 		"MuxJumpReg":    {"type": "Multiplexer", "latency": 15, "x": 3, "y": 320, "size": 32, "sel": "JumpReg", "in": ["0", "1"], "out": "Out", "desc": {"default": "Selects, in conjunction with the previous multiplexer, PC+4/branch address or the jump address as the new PC.", "pt": "Selecciona, em conjunto com o multiplexador anterior, o PC+4/endereço de branch ou o endereço de salto como novo PC."}},
 		"ForkJumpReg":{"type": "Fork", "x": 595, "y": 95, "size": 1, "in": "JumpReg", "out": ["Out1", "Out2"]},
 		"ForkEXR1_": {"type": "Fork", "x": 575, "y": 462, "size": 32, "in": "In", "out": ["Out1", "Out2"]},
-		"ShiftJumpReg":  {"type": "ShiftLeft", "x": 40, "y": 505, "in": {"id": "In", "size": 32}, "out": {"id": "Out", "size": 32}, "amount": 2, "desc": {"default": "The 2 less significant bits of the addresses of the instructions are always 00 (the addresses are multiples of 4). As such, these bits are not included in the instruction's target field.\nThis component restores those bits by shifting the target 2 bits to the left (or multiplying by 4), in case it is a jump instruction.", "pt": "Os 2 bits menos significativos dos endereços das instruções são sempre 00 (os endereços são múltiplos de 4). Como tal, estes bits não são incluídos no campo alvo da instrução.\nEste componente restaura esses bits deslocando o alvo 2 bits para a esquerda (ou multiplicando por 4), no caso de ser uma instrução de salto."}},
 
 
 
@@ -88,8 +87,8 @@
 		{"from": "ForkEXR1", "out": "Out2", "to": "ForkEXR1_", "in": "In", "end": {"x": 575, "y": 462}},
 		{"from": "ForkEXR1_", "out": "Out1", "to": "ForkEXR2", "in": "In", "points": [{"x": 421, "y": 462}]},
 
-		{"from": "ForkEXR1_", "out": "Out2", "to": "ShiftJumpReg", "in": "In", "points": [{"x": 575, "y": 520}], "end": {"x": 60, "y": 520}},
-		{"from": "ShiftJumpReg", "out": "Out", "to": "MuxJumpReg", "in": "1", "start": {"x": 40, "y": 520}, "points": [{"x": 10, "y": 520}], "end": {"x": 10, "y": 355}},
+		{"from": "ForkEXR1_", "out": "Out2", "to": "MuxJumpReg", "in": "1", "points": [{"x": 575, "y": 520}, {"x": 10, "y": 520}], "end": {"x": 10, "y": 355}},
+
 		
 
 
