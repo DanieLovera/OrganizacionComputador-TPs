@@ -7,6 +7,7 @@
 	},
 	"instructions": {
 		"j":    {"type": "J", "args": ["target"], "fields": {"op": 2, "target": "#1"}, "desc": "PC = target"},
+		
 		"nop":  {"type": "R", "fields": {"op": 0, "rs": 0, "rt": 0, "rd": 0, "shamt": 0, "func": 0}},
 		"add":  {"type": "R", "args": ["reg", "reg", "reg"], "fields": {"op": 0, "rs": "#2", "rt": "#3", "rd": "#1", "shamt": 0, "func": 32}, "desc": "$t1 = $t2 + $t3"},
 		"sub":  {"type": "R", "args": ["reg", "reg", "reg"], "fields": {"op": 0, "rs": "#2", "rt": "#3", "rd": "#1", "shamt": 0, "func": 34}, "desc": "$t1 = $t2 - $t3"},
@@ -33,6 +34,7 @@
 	},
 	"control": {
 		"2": {"Jump": 1},
+		
 		"0": {"RegDst": 1, "RegWrite": 1, "ALUOp": 2, "ALUSrc": 0, "MemToReg": 0},
 		"8": {"RegDst": 0, "RegWrite": 1, "ALUOp": 0, "ALUSrc": 1, "MemToReg": 0},
 		"4": {"ALUOp": 1, "ALUSrc": 0, "Branch": 1},
