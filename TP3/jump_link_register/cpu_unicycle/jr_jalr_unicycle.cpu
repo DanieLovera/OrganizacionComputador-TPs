@@ -3,8 +3,8 @@
 		"ForkReg1":    {"type": "Fork", "x": 370, "y": 248, "size": 32, "in": "In", "out": ["Out1", "Out2"]},
 		"MuxJumpReg":  {"type": "Multiplexer", "latency": 15, "x": 555, "y": 90, "size": 32, "sel": "JumpReg", "in": ["0", "1"], "out": "Out", "desc": {"default": "Selects PC+4 or the branch address as the new PC.", "pt": "Selecciona o PC+4 ou o endereço de branch como novo PC."}},
 		"ForkPC":     {"type": "Fork", "x": 80, "y": 265, "size": 32, "in": "In", "out": ["Out1", "Out2"]},
+		
 		"ForkPCAdder":     {"type": "Fork", "x": 175, "y": 75, "size": 32, "in": "In", "out": ["Out1", "Out2"]},
-
 		"PC":         {"type": "PC", "x": 40, "y": 250, "in": "NewPC", "out": "PC"},
 		"PCAdder":    {"type": "Add", "latency": 50, "x": 110, "y": 58, "in1": "In1", "in2": "In2", "out": "PC+4", "desc": {"default": "Calculates the address of the next sequential instruction.", "pt": "Calcula o endereço da instrução sequencial seguinte."}},
 		"Const4":     {"type": "Constant", "x": 85, "y": 73, "out": "Out", "val": 4, "size": 32},
